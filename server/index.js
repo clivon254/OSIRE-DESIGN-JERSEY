@@ -10,9 +10,13 @@ import userRouter from "./route/userRouter.js"
 import productRoute from "./route/productRoute.js"
 import cartRoute from "./route/cartRoute.js"
 import reveiwRoute from "./route/reveiwRoute.js"
-import { generateToken } from "./utils/verifyToken.js"
+import orderRoute from "./route/orderRoute.js"
+
+
+
 
 const app = express()
+
 
 const PORT = process.env.PORT
 
@@ -45,6 +49,9 @@ app.use('/api/cart', cartRoute)
 
 
 app.use('/api/reveiw', reveiwRoute)
+
+
+app.use('/api/order', orderRoute)
 
 
 // api
