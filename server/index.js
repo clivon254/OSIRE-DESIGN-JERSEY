@@ -10,6 +10,7 @@ import userRouter from "./route/userRouter.js"
 import productRoute from "./route/productRoute.js"
 import cartRoute from "./route/cartRoute.js"
 import reveiwRoute from "./route/reveiwRoute.js"
+import { generateToken } from "./utils/verifyToken.js"
 
 const app = express()
 
@@ -44,8 +45,6 @@ app.use('/api/cart', cartRoute)
 
 
 app.use('/api/reveiw', reveiwRoute)
-
-
 
 
 // api

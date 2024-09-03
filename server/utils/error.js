@@ -1,5 +1,6 @@
 
 
+
 export const errorHandler = async (statusCode,message) => {
 
     const error = new Error()
@@ -10,3 +11,4 @@ export const errorHandler = async (statusCode,message) => {
 
     return error ;
 }
+
