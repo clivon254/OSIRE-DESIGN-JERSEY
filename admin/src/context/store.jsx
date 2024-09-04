@@ -16,7 +16,7 @@ export default function StoreContextProvider(props)
         <StoreContext.Provider value={contextValue}>
 
             {props.children}
-            
+
         </StoreContext.Provider>
     )
 }

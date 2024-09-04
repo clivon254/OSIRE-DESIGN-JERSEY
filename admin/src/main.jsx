@@ -6,6 +6,7 @@ import './index.css'
 import { PersistGate } from 'redux-persist/integration/react'
 import {store,persistor} from "./redux/store.js"
 import StoreContextProvider from './context/store.jsx'
+import ThemeProvider from './components/ThemeProvider.jsx'
 
 
 createRoot(document.getElementById('root')).render(
@@ -19,7 +20,11 @@ createRoot(document.getElementById('root')).render(
 
         <StoreContextProvider>
 
-          <App />
+          <ThemeProvider>
+
+           <App />
+
+          </ThemeProvider>
 
         </StoreContextProvider>
       

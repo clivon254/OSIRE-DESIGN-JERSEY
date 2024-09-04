@@ -184,10 +184,10 @@ export const forgotPassword = async (req,res,next) => {
         })
 
         var mailOptions = {
-            from:"clivon84@gmail.com",
+            from:"OSIRE DESIGN JERSEY",
             to:user.email,
             subject:"Reset Passord",
-            text:`Click on this link to reset your password: http://localhost:700/reset-password/${token}`
+            text:`Click on this link to reset your password: http://localhost:5173/reset-password/${token}`
         }
 
         transporter.sendMail(mailOptions ,(error, info) => {
