@@ -10,13 +10,13 @@ const productRoute = express.Router()
 
 
 
-productRoute.post("/add-product", verifyToken, addProduct)
+productRoute.post("/add-product", addProduct)
 
 
-productRoute.put("/update-product/:productId", verifyToken, updateProduct)
+productRoute.put("/update-product/:productId", updateProduct)
 
 
-productRoute.delete("/delete-product/:productId", verifyToken, deleteProduct)
+productRoute.delete("/delete-product/:productId", deleteProduct)
 
 
 productRoute.get("/get-product/:productId", getProduct)

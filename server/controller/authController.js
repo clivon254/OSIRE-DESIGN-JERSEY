@@ -63,6 +63,12 @@ export const signin = async (req,res,next) => {
             return next(errorHandler(401, "invalid password"))
         }
 
+        const cookieOptions={
+            httpOnly:true,
+            secure:true,
+            sameSite:'strict'
+        }
+
         const token = jwt.sign(
             {id:user._id ,isAdmin:user.isAdmin},
             process.env.JWT_SECRETE
@@ -71,7 +77,7 @@ export const signin = async (req,res,next) => {
         const {password:pass, ...rest} = user._doc 
 
         res.status(200)
-            .cookie('access_token',token,{httpOnly:true})
+            .cookie('access_token',token, cookieOptions)
             .json({success:true ,rest})
 
     }

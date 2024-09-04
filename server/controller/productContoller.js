@@ -7,10 +7,10 @@ import { errorHandler } from "../utils/error.js"
 
 export const addProduct = async (req,res,next) => {
 
-    if(!req.user.isAdmin)
-    {
-        return next(errorHandler,"only an Admin can add product")
-    }
+    // if(!req.user.isAdmin)
+    // {
+    //     return next(errorHandler(403,"only an Admin can add product"))
+    // }
 
     const {team,status,season,league,tag,instock,wholesale,regularprice,discountprice} = req.body 
 
@@ -22,7 +22,7 @@ export const addProduct = async (req,res,next) => {
 
         await product.save()
 
-        res.status(200).json({success:true , message:`${team} jersey added sucessfully`})
+        res.status(200).json({success:true , product , message:`${team} jersey added sucessfully`})
     }
     catch(error)
     {
@@ -81,10 +81,10 @@ export const getProducts = async (req,res,next) => {
 
 export const updateProduct = async (req,res,next) => {
 
-    if(!req.user.isAdmin)
-    {
-        return next(errorHandler(403,"you are not allowed to delete this product"))
-    }
+    // if(!req.user.isAdmin)
+    // {
+    //     return next(errorHandler(403,"you are not allowed to delete this product"))
+    // }
 
     try
     {
@@ -130,10 +130,10 @@ export const updateProduct = async (req,res,next) => {
 
 export const deleteProduct = async (req,res,next) => {
     
-    if(!req.user.isAdmin)
-    {
-        return next(errorHandler(403,"You are not allowed to delete the product"))
-    }
+    // if(!req.user.isAdmin)
+    // {
+    //     return next(errorHandler(403,"You are not allowed to delete the product"))
+    // }
 
     try
     {
