@@ -7,13 +7,13 @@ import { verifyToken } from "../utils/verifyToken.js"
 const reveiwRoute = express.Router()
 
 
-reveiwRoute.post('/add-reveiw/:productId', verifyToken, addReveiw)
+reveiwRoute.post('/add-reveiw/:productId', addReveiw)
 
-reveiwRoute.get('/get-reveiws/:productId', verifyToken, getReveiws)
+reveiwRoute.get('/get-reveiws/:productId', getReveiws)
 
-reveiwRoute.put('/update-reveiw/:productId', verifyToken, updateReveiw)
+reveiwRoute.put('/update-reveiw/:productId', updateReveiw)
 
-reveiwRoute.delete('/delete-reveiw/:productId', verifyToken, deleteReveiw)
+reveiwRoute.delete('/delete-reveiw/:productId', deleteReveiw)
 
 
 

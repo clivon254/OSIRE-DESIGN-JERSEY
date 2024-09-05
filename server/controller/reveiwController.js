@@ -8,12 +8,11 @@ import { errorHandler } from "../utils/error.js";
 
 export const addReveiw = async (req,res,next) => {
 
-    const {content ,rating} = req.body ;
+    const {content ,rating , userId} = req.body ;
 
     const productId = req.params.productId
 
-    const userId = req.user.id 
-
+    
     try
     {
        
@@ -52,11 +51,10 @@ export const addReveiw = async (req,res,next) => {
 
 export const updateReveiw = async (req,res,next) => {
 
-    const {rating} = req.body
+    const {rating , userId} = req.body
 
     const productId = req.params.productId
 
-    const userId = req.user.id 
 
     try
     {
@@ -116,7 +114,8 @@ export const deleteReveiw = async (req,res,next) => {
 
     const productId = req.params.productId 
 
-    const userId = req.user.id
+    const userId = req.body.userId 
+    
     try
     {
         const existingReveiw = await Reveiw.findOne({userId, productId})

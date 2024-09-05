@@ -47,7 +47,7 @@ export default function EditProduct() {
 
       try
       {
-        const res = await axios.get( url + `/api/product/get-product/${params.productId}`,formData)
+        const res = await axios.get( url + `/api/product/get-product/${params.productId}`)
 
         if(res.data.success)
         {

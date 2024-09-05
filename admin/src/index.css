@@ -13,6 +13,12 @@
     @apply w-full px-6 py-8 shadow-md border border-gray-50/20 rounded
 }
 
+.hr
+{
+    @apply my-7
+}
+
+
 .title
 {
     @apply text-4xl lg:text-5xl  font-semibold tracking-wider text-gray-800 dark:text-white mb-5  text-center
@@ -20,7 +26,7 @@
 
 .subtitle
 {
-    @apply  text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-wide text-gray-600 dark:text-white capitalize mb-3 text-center
+    @apply  text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-wide text-gray-600 dark:text-white capitalize mb-3 
 }
 
 .active-link{
