@@ -14,7 +14,7 @@ cartRoute.post('/add-cart', addToCart)
 cartRoute.put('/remove-cart', removeFromCart)
 
 
-cartRoute.get('/get-cart', getCart)
+cartRoute.post('/get-cart', getCart)
 
 
 export default cartRoute 

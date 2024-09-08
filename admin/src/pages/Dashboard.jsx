@@ -1,7 +1,6 @@
 
 
 import { createContext, useContext, useEffect, useState } from "react"
-import { useSelector } from "react-redux"
 import React from 'react'
 import { StoreContext } from "../context/store"
 import axios from "axios"
@@ -9,57 +8,52 @@ import axios from "axios"
 
 export default function Dashboard() {
 
-  const {url} = useContext(StoreContext)
+  const {url,products,users} = useContext(StoreContext)
 
-  const {currentUser}  = useSelector(state => state.user)
-
-  const [cartItems, setCartItems] = useState([])
-
-  const [data ,setData] = useState({
-    userId:currentUser._id
-  })
-
-  // fetchCartItems
-  const fetchCartItems = async () => {
-
-      try
-      {
-          const res = await axios.get( url + "/api/cart/get-cart",data)
-
-          if(res.data.success)
-          {
-              setCartItems(res.data.cartData)
-          }  
-          else
-          {
-              console.log(res.data.message)
-          }
-
-      }
-      catch(error)
-      {
-          console.log(error.message)
-      }
-
-  }
-
-  useEffect(() => {
-        
-    if(currentUser._id)
-    {
-        fetchCartItems()
-    }
-    
-},[currentUser._id])
+  const admins = users.filter((user) => (user.isAdmin === true))
 
 
-  console.log(cartItems)
-
-  console.log(data)
 
   return (
 
-    <div>Dashboard</div>
+    <main className="p-5">
+
+      <div className="contain">
+
+        <h2 className="title">Admin dashboard</h2>
+
+        {/* stats */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-5 gap-y-10">
+
+            <div className="shadow p-3 dark:border border-slate-800 rounded">
+
+              <span className="block text-xl font-semibold">Total Products</span>
+
+              <span className="block font-bold text-2xl">{products.length}</span>
+              
+            </div>
+
+            <div className="shadow p-3 dark:border border-slate-800 rounded">
+
+              <span className="block text-xl font-semibold">Total Users</span>
+
+              <span className="block font-bold text-2xl">{users.length}</span>
+              
+            </div>
+
+            <div className="shadow p-3 dark:border border-slate-800 rounded">
+
+              <span className="block text-xl font-semibold">Admins</span>
+
+              <span className="block font-bold text-2xl">{admins.length}</span>
+              
+            </div>
+
+        </div>
+
+      </div>
+
+    </main>
     
   )
 

@@ -240,6 +240,7 @@ export default function ProductDetail() {
                     product?.imageUrls?.map((image,index) => (
 
                       <img 
+                        key={index}
                         src={image} 
                         alt={`image ${index + 1}`}
                         className="bg-black/10" 

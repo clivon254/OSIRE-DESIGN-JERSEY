@@ -1,7 +1,7 @@
 
 
-import { Drawer, Dropdown, Navbar,Avatar } from 'flowbite-react'
-import React from 'react'
+import { Drawer, Dropdown, Navbar,Avatar, TextInput,Button } from 'flowbite-react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import {useSelector,useDispatch} from "react-redux"
 import DashSidebar from './DashSidebar'
@@ -9,7 +9,7 @@ import { useContext } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { StoreContext } from '../context/store'
 import {toast} from "sonner"
-import {MdClose,MdMenu} from "react-icons/md"
+import {MdClose,MdMenu, MdOutlineSearch} from "react-icons/md"
 import {FaSun,FaMoon} from "react-icons/fa"
 import Logo from './Logo'
 import { toggleTheme } from '../redux/theme/themeSlice'
@@ -30,8 +30,24 @@ export default function Header() {
 
     const navigate = useNavigate()
 
+    const [searchTerm ,setSearchTerm] = useState('')
 
-     // handleSignOut
+    // handleSubmit
+    const handleSubmit = (e) => {
+
+        e.preventDefault()
+
+        const urlParams = new URLSearchParams(location.search)
+
+        urlParams.set('searchTerm', searchTerm)
+
+        const searchQuery = urlParams.toString()
+
+        navigate(`/search?${searchQuery}`)
+        
+    }
+
+    // handleSignOut
      const handleSignOut = async () => {
 
         try
@@ -55,8 +71,22 @@ export default function Header() {
 
     }
 
+    useEffect(() => {
+
+        const urlParams = new URLSearchParams(location.search)
+
+        const searchTermFromUrl = urlParams.get('searchTerm')
+
+        if(searchTermFromUrl)
+        {
+            setSearchTerm(searchTermFromUrl)
+        }
+
+    },[location.search])
+
   return (
     <>
+
         <Navbar className="border-b sticky top-0 z-[100] p-5">
 
             <div className="">
@@ -87,6 +117,23 @@ export default function Header() {
             </div>
 
             <div className="flex items-center gap-x-2 md:order-2">
+                
+                <form onSubmit={handleSubmit} className="">
+
+                    <TextInput 
+                        type="text"
+                        placeholder='Search....'
+                        rightIcon={MdOutlineSearch}
+                        className="hidden md:block"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+
+                </form>
+                
+                <button className="w-12 h-10 md:hidden" >
+                        <MdOutlineSearch/>
+                </button>
 
                 <button 
                     className="w-10 h-10 flex items-center justify-center border rounded-full border-gray-300"
@@ -148,6 +195,7 @@ export default function Header() {
             </Drawer.Items>
 
         </Drawer>
+        
     </>
   )
 

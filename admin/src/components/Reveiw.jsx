@@ -20,7 +20,9 @@ export default function Reveiw({reveiws,productId}) {
 
    const [error, setError] = useState(null)
     
-   const [formData , setFormData] = useState({})
+   const [formData , setFormData] = useState({
+    userId:currentUser._id
+   })
 
    
     // handleChange
@@ -43,7 +45,7 @@ export default function Reveiw({reveiws,productId}) {
 
         try
         {
-            const res = await axios.post( url + `/api/reveiw/add-reveiw/${productId}`,{formData, userId:currentUser._id})
+            const res = await axios.post( url + `/api/reveiw/add-reveiw/${productId}`,formData)
 
             if(res.data.success)
             {

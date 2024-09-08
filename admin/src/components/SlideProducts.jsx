@@ -14,7 +14,7 @@ export default function SlideProducts({products}) {
 
   return (
 
-   <div className="relative">
+   <div className="">
 
         <Swiper
             className="mySwiper"
@@ -53,9 +53,9 @@ export default function SlideProducts({products}) {
         >
             {products?.map((product,index) => (
 
-                <SwiperSlide >
+                <SwiperSlide key={index}>
 
-                    <ItemCard key={product._id} product={product}/>
+                    <ItemCard  product={product}/>
 
                 </SwiperSlide>
 
