@@ -27,7 +27,7 @@ const productSchema = new mongoose.Schema({
 
     size:{type:String },
 
-    averageRating:{type:Number},
+    averageRating:{type:Number ,default:5},
 
     imageUrls:{type:Array , default:[]}
 },

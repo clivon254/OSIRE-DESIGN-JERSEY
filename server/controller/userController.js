@@ -29,6 +29,22 @@ export const getUser = async (req,res,next) => {
 }
 
 
+export const getUsers = async (req,res,next) => {
+
+    try
+    {
+        const users = await User.find({})
+
+        res.status(200).json({success:true ,users})
+    }
+    catch(error)
+    {
+        next(error.message)
+    }
+
+}
+
+
 export const updateUser = async (req,res,next) => {
 
     if(req.user.id !== req.params.userId)
@@ -67,6 +83,7 @@ export const updateUser = async (req,res,next) => {
     }
 
 }
+
 
 
 export const deleteUser = async (req,res,next) => {

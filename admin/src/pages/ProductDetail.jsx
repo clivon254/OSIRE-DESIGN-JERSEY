@@ -11,8 +11,13 @@ import { StoreContext } from '../context/store'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
 import Reveiw from '../components/Reveiw'
+import SlideProducts from '../components/SlideProducts'
+import { toast } from 'sonner'
+import { useSelector } from 'react-redux'
 
 export default function ProductDetail() {
+
+  const {currentUser} = useSelector(state => state.user)
 
   const params = useParams()
 
@@ -22,19 +27,24 @@ export default function ProductDetail() {
 
   const [product,setProduct] = useState({})
 
-  const {url} = useContext(StoreContext)
+  const {url,cartItems,setCartItems} = useContext(StoreContext)
 
-  const [formData ,setFormData] = useState({})
+  const [formData ,setFormData] = useState({
+    userId:currentUser._id,
+    itemId:params.productId
+  })
 
   const [reveiws, setReveiws] = useState([])
 
+  const [relatedProducts, setRelatedProducts] = useState([])
 
+  
   useEffect(() => {
 
-    // if(params.productId)
-    // {
-    //   window.scrollTo({top:0 ,left:0 ,behavior:"smooth"})
-    // }
+    if(params.productId)
+    {
+      window.scrollTo({top:0 ,left:0 ,behavior:"smooth"})
+    }
 
      // fetchProduct
      const fetchProduct = async () => {
@@ -54,6 +64,40 @@ export default function ProductDetail() {
           setLoading(false)
 
           setError(null)
+        }
+
+      }
+      catch(error)
+      {
+        console.log(error.message)
+
+        setError("something went wrong")
+      }
+
+     }
+
+     // fetchRelatedProducts
+     const fetchRelatedProducts = async () => {
+
+      try
+      {
+        setLoading(true)
+
+        setError(null)
+
+        const res = await axios.get( url + `/api/product/get-products?league=${product.league}`)
+
+        if(res.data.success)
+        {
+          setRelatedProducts(res.data.products)
+
+          setLoading(false)
+
+          setError(null)
+        }
+        else
+        {
+          console.log("check the api")
         }
 
       }
@@ -87,22 +131,75 @@ export default function ProductDetail() {
 
     }
 
+
     fetchReveiw()
 
     fetchProduct()
 
-  },[params.productId])
+    if(product.league)
+    {
+       fetchRelatedProducts()
+    }
+   
+
+  },[params.productId,product.league])
+
 
 
   // handleChange
-  const handleChange = () => {}
+  const handleChange = (e) => {
+
+    setFormData({...formData,[e.target.name]:e.target.value})
+
+  }
 
   // handleSubmit
-  const handleSubmit = () => {}
+  const handleSubmit = async (e) => {
+
+    e.preventDefault()
+    
+    let itemId = params.productId
+
+    try
+    {
+      console.log("am working")
+
+       const res = await axios.post( url + "/api/cart/add-cart",formData)
+
+       if(res.data.success)
+       {
+          // if(!cartItems[itemId])
+          // {
+          //   setCartItems((prev) => ({...prev,[itemId]:1}))
+
+          //   toast.success('product added to cart')
+          // }
+          // else
+          // {
+          //   toast.success('product already added to cart')
+          // }
+          toast.success('product added to cart')
+
+          setFormData({})
+       }
+       else
+       {
+        console.log("check the api")
+       }
+
+    }
+    catch(error)
+    {
+      console.log(error.message)
+    }
+
+  }
+
+
 
   return (
 
-    <main className="p-5">
+    <main className="p-5 w-full">
 
       {loading && (
 
@@ -125,7 +222,7 @@ export default function ProductDetail() {
         <div className="contain">
           
           {/*  product*/}
-          <div className="grid grdi-cols-1 md:grid-cols-2 gap-10 my-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 my-10">
 
             {/* right */}
             <div className="">
@@ -263,16 +360,18 @@ export default function ProductDetail() {
                 </div>
                 
                 {/* buttons */}
-                <div className="flex flex-col md:flex-row gap-x-5 gap-y-3 w-full">
+                <div className="flex flex-col lg:flex-row gap-x-5 gap-y-3 w-full">
 
                     <Button
-                      gradientDuoTone="redToYellow"
+                      gradientDuoTone="pinkToOrange"
                       className="w-full"
+                      type='submit'
                     >
                       Add to Cart
                     </Button>
 
                     <Button
+                      type="button"
                       className="w-full"
                       gradientDuoTone="greenToBlue"
                     >
@@ -289,7 +388,7 @@ export default function ProductDetail() {
 
         
           {/* others */}
-          <div className="py-10">
+          <div className=" w-full py-10">
               
             <hr className="hr" />
 
@@ -310,7 +409,7 @@ export default function ProductDetail() {
                 This product is made from 100% recycled polyester fabric
               </p>
               
-              <ul className="list-disc max-w-xl mx-auto text-red-500">
+              <ul className="list-disc  max-w-xl mx-auto text-red-500">
 
                 <li className="">slim fit,easy feel</li>
 
@@ -328,12 +427,12 @@ export default function ProductDetail() {
 
               </ul>
 
-              <p className="text-red-500 max-w-xl mx-auto">
+              <p className="text-red-500  mx-auto max-w-xl">
                 <span className="text-red-600 font-bold">Shipping time :</span>Your order will be send within 3 business days
                 . The total estimate is 5-25 business days. We will send the tracking number and photos of jersey to you via email when ship out your order.
               </p>
 
-              <p className="text-red-500 max-w-xl mx-auto">
+              <p className="text-red-500  mx-auto max-w-xl">
                 If you have any other questions, please contact us and we will do iur best to help you out
               </p>
 
@@ -369,6 +468,7 @@ export default function ProductDetail() {
 
               <h2 className="subtitle">Related products</h2>
               
+              <SlideProducts products={relatedProducts}/>
 
             </div>
 

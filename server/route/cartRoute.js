@@ -8,13 +8,13 @@ import { verifyToken } from "../utils/verifyToken.js"
 const cartRoute = express.Router()
 
 
-cartRoute.post('/add-cart', verifyToken, addToCart)
+cartRoute.post('/add-cart', addToCart)
 
 
-cartRoute.put('/remove-cart',verifyToken, removeFromCart)
+cartRoute.put('/remove-cart', removeFromCart)
 
 
-cartRoute.get('/get-cart',verifyToken, getCart)
+cartRoute.get('/get-cart', getCart)
 
 
 export default cartRoute 

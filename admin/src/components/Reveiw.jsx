@@ -107,7 +107,7 @@ export default function Reveiw({reveiws,productId}) {
         {
             currentUser && (
 
-               <form onSubmit={handleSubmit} className="max-w-md border p-3 rounded-md space-y-5">
+               <form onSubmit={handleSubmit} className="max-w-xl border p-3 rounded-md space-y-5">
 
                     <div className="flex flex-col gap-2">
 

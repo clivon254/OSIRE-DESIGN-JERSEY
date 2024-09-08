@@ -6,9 +6,14 @@ import { errorHandler } from "../utils/error.js"
 
 export const addToCart = async (req,res,next) => {
 
-    const {name,size,number,itemId} = req.body 
+    const {name,size,number,itemId,userId} = req.body 
 
     const product = await Product.findById(itemId)
+
+    if(!product)
+    {
+        return next(errorHandler(404,"Product not found"))
+    }
 
     let additionalCost = 0 ;
 
@@ -26,14 +31,19 @@ export const addToCart = async (req,res,next) => {
         product.number = number
     }
     
-    product.regularprice += additionalCost
+    product.discountprice += additionalCost
 
     product.size = size ;
 
     try
     {
 
-        let userData = await User.findById(req.user.id)
+        let userData = await User.findById(userId)
+        
+        if(!product)
+        {
+            return next(errorHandler(404,"Product not found"))
+        }
 
         let cartData = await userData.cartData ;
 
@@ -43,10 +53,10 @@ export const addToCart = async (req,res,next) => {
         }
         else
         {
-            res.json({message:"product already added"})
+            res.status(400).json({success:false,message:"product already added"})
         }
 
-        await User.findByIdAndUpdate(req.user.id,{cartData})
+        await User.findByIdAndUpdate(userId,{cartData})
 
         res.status(200).json({success:true , message:"Added to cart"})
 
@@ -61,9 +71,11 @@ export const addToCart = async (req,res,next) => {
 
 export const removeFromCart = async (req,res,next) => {
 
+    const {userId} = req.body
+    
     try
     {
-        let userData = await User.findById(req.user.id)
+        let userData = await User.findById(userId)
 
         let cartData = await userData.cartData ;
 
@@ -72,7 +84,7 @@ export const removeFromCart = async (req,res,next) => {
             cartData[req.body.itemId] -= 1
         }
 
-        await User.findByIdAndUpdate(req.user.id,{cartData})
+        await User.findByIdAndUpdate(userId,{cartData})
 
         res.json({success:true ,message:"Removed from cart"})
 
@@ -87,9 +99,11 @@ export const removeFromCart = async (req,res,next) => {
 
 export const getCart = async (req,res,next) => {
 
+    const {userId} = req.body
+
     try
     {
-        let userData = await User.findById(req.user.id)
+        let userData = await User.findById(userId)
 
         let cartData = await userData.cartData 
 
