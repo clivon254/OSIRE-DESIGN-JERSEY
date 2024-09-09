@@ -1,6 +1,5 @@
 
 
-
 import React from 'react'
 import Logo from '../components/Logo'
 import { useState } from 'react'
@@ -9,19 +8,16 @@ import { useContext } from 'react'
 import { StoreContext } from '../context/store'
 import { Alert, Button, Label, TextInput } from 'flowbite-react'
 import { TbCheckbox } from "react-icons/tb"
-import { useParams } from 'react-router-dom'
 
-export default function ResetPassword() {
+export default function ForgotPassword() {
 
     const [formData, setFormData] = useState({})
 
     const {url} = useContext(StoreContext)
 
-    const [resetSuccess, setResetSuccess] = useState(null)
+    const [emailSuccess, setEmailSuccess] = useState(null)
 
-    const [resetFailure, setResetFailure] = useState(null)
-
-    const {token} = useParams()
+    const [emailFailure, setEmailFailure] = useState(null)
 
     // handleChange
     const handleChange = (e) => {
@@ -35,23 +31,21 @@ export default function ResetPassword() {
 
         e.preventDefault()
 
-        setResetSuccess(null)
+        setEmailSuccess(null)
 
-        setResetFailure(null)
+        setEmailFailure(null)
 
         try
         {
-            const res = await axios.post(url + `/api/auth/reset-password/${token}`,formData)
+            const res = await axios.post(url + "/api/auth/forgot-password",formData)
 
             if(res.data.success)
             {
-                setResetSuccess("password reset successfully ")
-
-                setFormData({})
+                setEmailSuccess("Link sent to email")
             }
             else
             {
-                setResetFailure("password do not match")
+                setEmailFailure("user not found")
             }
 
         }
@@ -60,8 +54,6 @@ export default function ResetPassword() {
             console.log(error.message)
         }
     }
-
-    console.log(formData)
 
 
   return (
@@ -76,32 +68,21 @@ export default function ResetPassword() {
 
         <div className="w-full max-w-md">
             
+            <h2 className="text-center  px-5 text-sm md:text-base">
+                Enter your email and a link will be sent to your email account to reset password
+            </h2>
 
             <form onSubmit={handleSubmit} className=" flex flex-col gap-y-5 px-10">
 
                 <div className="flex flex-col gap-2">
 
-                    <Label value="password"/>
+                    <Label value="email"/>
 
                     <TextInput 
-                        type="password"
-                        placeholder="*******"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                    />
-
-                </div>
-
-                <div className="flex flex-col gap-2">
-
-                    <Label value="confirm password"/>
-
-                    <TextInput 
-                        type="password"
-                        placeholder="********"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
+                        type="email"
+                        placeholder="name@gmail.com"
+                        name="email"
+                        value={formData.email}
                         onChange={handleChange}
                     />
 
@@ -112,29 +93,30 @@ export default function ResetPassword() {
                     gradientDuoTone="pinkToOrange"
                 >
                     {
-                        resetSuccess ? 
+                        emailSuccess ? 
                         (
                             <span className="flex items-center gap-x-2">
-                                password reset successfully <TbCheckbox size={20}/>
+                                Email Sent <TbCheckbox size={20}/>
                             </span>
                         ) : 
-                        ("Reset password")                    
+                        ("send")                    
                     }
                 </Button>
 
             </form>
 
+
             <div className="px-10">
 
-                {resetSuccess && (
+                {emailSuccess && (
 
-                    <Alert color="success" className="my-5">{resetSuccess}</Alert>
+                    <Alert color="success" className="my-5">{emailSuccess}</Alert>
 
                 )}
 
-                {resetFailure && (
+                {emailFailure && (
 
-                    <Alert color="failure" className="my-5">{resetFailure}</Alert>
+                    <Alert color="failure" className="my-5">{emailFailure}</Alert>
 
                 )}
 
