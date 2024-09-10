@@ -30,7 +30,7 @@ export default function StoreContextProvider(props)
     const [cartItems, setCartItems] = useState([])
 
     const [data ,setData] = useState({
-        userId:currentUser._id
+        userId:currentUser?._id
       })
     
     const [close ,setClose] = useState(false)
@@ -134,13 +134,13 @@ export default function StoreContextProvider(props)
 
         fetchUsers()
 
-        if(currentUser._id)
+        if(currentUser?._id)
         {
             fetchCartItems()
         }
             
 
-    },[currentUser._id])
+    },[currentUser?._id])
 
 
     const contextValue = {

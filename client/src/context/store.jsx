@@ -47,6 +47,7 @@ export default function StoreContextProvider(props)
 
     }
 
+
     // fetchProducts
     const fetchProducts = async () => {
 
@@ -128,6 +129,49 @@ export default function StoreContextProvider(props)
 
    }
 
+    // apply Coupon
+    const ApplyCoupons = async (code) => {
+
+        let data = {
+            code:code,
+            totalCartAmount:getTotalCartAmount()
+        }
+
+        try
+        {
+            const res = await axios.post(url + "/api/cart/apply-coupon",data)
+        }
+        catch(error)
+        {
+            console.log(error.message)
+        }
+
+    } 
+
+   // Total Amount
+   const getTotalCartAmount = () => {
+
+        let totalAmount = 0 ;
+        
+        for(const item in cartItems)
+        {
+            if(cartItems[item] > 0)
+            {
+                let itemInfo = products.find((product) => product._id === item)
+
+                if(itemInfo)
+                {
+                    totalAmount += itemInfo.discountprice * cartItems[item]
+                }
+
+            }
+        }
+
+        return totalAmount
+   }
+
+  
+
     useEffect(() => {
 
         fetchProducts()
@@ -155,7 +199,8 @@ export default function StoreContextProvider(props)
         details,
         setDetails,
         close,
-        setClose
+        setClose,
+        getTotalCartAmount
     }
 
     return(

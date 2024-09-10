@@ -15,6 +15,9 @@ import ResetPassword from "./pages/ResetPassword"
 import ListOfOrders from "./pages/ListOfOrders"
 import Header from "./components/Header"
 import Home from "./pages/Home"
+import FooterComp from "./components/FooterComp"
+import Cart from "./pages/Cart"
+import CheckOut from "./pages/CheckOut"
 
 function Layout(){
 
@@ -26,11 +29,13 @@ function Layout(){
 
             <Header />
 
-            <div className="w-full">
+            <div className="w-full ">
 
               <Outlet />
 
             </div>
+
+            <FooterComp/>
 
         </div> 
 
@@ -61,6 +66,10 @@ export default function App() {
               <Route path="/profile" element={<Profile/>}/>
 
               <Route path="/search" element={<Search/>}/>
+
+              <Route path="/cart" element={<Cart/>}/>
+
+              <Route path="/check-out" element={<CheckOut/>}/>
 
           </Route>
 

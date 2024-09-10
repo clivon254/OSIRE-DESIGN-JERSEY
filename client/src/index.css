@@ -1,3 +1,108 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.contain{
+    @apply shadow-xl rounded-xl border border-gray-100 dark:border-gray-600 w-full mx-auto my-5 px-6 py-4
+}
+
+.containing
+{
+    @apply w-full px-6 py-8 shadow-md border border-gray-50/20 rounded
+}
+
+.hr
+{
+    @apply my-7
+}
+
+.hr2
+{
+    @apply my-4
+}
+
+
+.title
+{
+    @apply text-4xl lg:text-5xl  font-semibold tracking-wider text-gray-800 dark:text-white mb-5  text-center
+}
+
+.subtitle
+{
+    @apply  text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-wide text-gray-600 dark:text-white capitalize mb-3 
+}
+
+.active-link{
+
+    @apply relative text-blue-600 ease-in-out duration-500
+ 
+  }
+
+
+/* PRODUCT DETAILS IMAGES */
+.productCarousel.carousel-root {
+    
+    @apply flex  flex-col gap-3 
+
+}
+
+.productCarousel.carousel-root .carousel {
+
+    @apply w-full 
+
+}
+
+.productCarousel.carousel-root .carousel.carousel-slider {
+    
+    @apply h-80 p-2 shadow
+}
+
+.productCarousel.carousel-root .carousel.carousel-slider .slider-wrapper img {
+   
+    @apply w-full h-80 
+}
+
+.productCarousel.carousel-root .carousel .thumbs-wrapper {
+    
+    @apply flex items-center justify-center 
+
+}
+
+.productCarousel.carousel-root .carousel .thumb {
+
+    @apply h-[100px] rounded overflow-hidden relative 
+
+}
+
+.productCarousel.carousel-root .carousel .thumb img {
+    
+    @apply w-full h-full object-cover object-center 
+
+}
+
+.productCarousel.carousel-root .carousel .thumb:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: black;
+    opacity: 0;
+}
+
+.productCarousel.carousel-root .carousel .thumb.selected,
+.productCarousel.carousel-root .carousel .thumb:hover {
+    border: 0;
+}
+
+.productCarousel.carousel-root .carousel .thumb:hover:after,
+.productCarousel.carousel-root .carousel .thumb.selected:after {
+    opacity: 0.2;
+}
+
+.productCarousel .control-arrow {
+    @apply hidden
+} 

@@ -11,6 +11,7 @@ import productRoute from "./route/productRoute.js"
 import cartRoute from "./route/cartRoute.js"
 import reveiwRoute from "./route/reveiwRoute.js"
 import orderRoute from "./route/orderRoute.js"
+import couponRoute from "./route/couponRoute.js"
 
 
 
@@ -52,6 +53,10 @@ app.use('/api/reveiw', reveiwRoute)
 
 
 app.use('/api/order', orderRoute)
+
+
+app.use('/api/coupon', couponRoute)
+
 
 
 // api

@@ -31,13 +31,17 @@ export const addToCart = async (req,res,next) => {
         product.number = number
     }
     
-    product.discountprice += additionalCost
+
+    product.discountprice += additionalCost ;
+
+    await product.save()
 
     product.size = size ;
 
     try
     {
-
+        await product.save()
+        
         let userData = await User.findById(userId)
         
         if(!product)
@@ -53,7 +57,7 @@ export const addToCart = async (req,res,next) => {
         }
         else
         {
-            res.status(400).json({success:false,message:"product already added"})
+            cartData[itemId] += 1
         }
 
         await User.findByIdAndUpdate(userId,{cartData})
@@ -68,6 +72,37 @@ export const addToCart = async (req,res,next) => {
 
 }
 
+export const increaseCart = async (req,res,next) => {
+
+    const {userId,itemId} = req.body
+    
+    try
+    {
+        let userData = await User.findById(userId)
+
+        let cartData = await userData.cartData ;
+
+        if(!cartData[itemId])
+        {
+          cartData[itemId] = 1
+        }
+        else
+        {
+            cartData[itemId] += 1
+        }
+    
+
+        await User.findByIdAndUpdate(userId,{cartData})
+
+        res.json({success:true ,message:"product increased in cart"})
+
+    }
+    catch(error)
+    {
+        next(error)
+    }
+
+}
 
 export const removeFromCart = async (req,res,next) => {
 
@@ -95,7 +130,6 @@ export const removeFromCart = async (req,res,next) => {
     }
 
 }
-
 
 export const getCart = async (req,res,next) => {
 
