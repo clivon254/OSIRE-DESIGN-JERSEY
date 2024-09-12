@@ -8,7 +8,7 @@ import axios from "axios"
 
 export default function Dashboard() {
 
-  const {url,products,users} = useContext(StoreContext)
+  const {url,products,users,orders} = useContext(StoreContext)
 
   const admins = users.filter((user) => (user.isAdmin === true))
 
@@ -46,6 +46,14 @@ export default function Dashboard() {
               <span className="block text-xl font-semibold">Admins</span>
 
               <span className="block font-bold text-2xl">{admins.length}</span>
+              
+            </div>
+
+            <div className="shadow p-3 dark:border border-slate-800 rounded">
+
+              <span className="block text-xl font-semibold">Orders</span>
+
+              <span className="block font-bold text-2xl">{orders.length}</span>
               
             </div>
 

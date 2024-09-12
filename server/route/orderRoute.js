@@ -8,7 +8,7 @@ import { generateToken, verifyToken } from "../utils/verifyToken.js"
 const orderRoute = express.Router()
 
 
-orderRoute.post('/place-order', verifyToken ,generateToken , placeOrder)
+orderRoute.post('/place-order' ,generateToken , placeOrder)
 
 
 orderRoute.post('/callback', callback)
@@ -17,7 +17,7 @@ orderRoute.post('/callback', callback)
 orderRoute.post('/verify-order', verifyOrder)
 
 
-orderRoute.get('/user-order', userOrders)
+orderRoute.post('/user-order', userOrders)
 
 
 orderRoute.get('/admin-order', adminOrders)

@@ -33,26 +33,26 @@ export default function ItemCard({product}) {
 
         )}
 
-        <div className=" w-full group shadow-md dark:border dark:border-slate-800 flex flex-col gap-y-3 " >
+        <div className=" w-full group shadow-md dark:border dark:border-slate-800 flex flex-col gap-y-1 py-2" >
             
             {/* image */}
-            <div className="w-full h-[250px] relative">
+            <div className="w-full h-[150px] relative">
 
-            <Link to={`/product-details/${product._id}`}>
+                <Link to={`/product-details/${product._id}`}>
 
-                    <img 
-                        src={product.imageUrls[0]}
-                        alt="" 
-                        className="group-hover:opacity-0 w-full h-full" 
-                    />
+                        <img 
+                            src={product.imageUrls[0]}
+                            alt="" 
+                            className="group-hover:opacity-0 w-full h-full" 
+                        />
 
-                    <img 
-                        src={product.imageUrls[1]}
-                        alt="" 
-                        className="absolute top-0 left-0  opacity-0 group-hover:opacity-100 w-full h-full" 
-                    />
+                        <img 
+                            src={product.imageUrls[1]}
+                            alt="" 
+                            className="absolute top-0 left-0  opacity-0 group-hover:opacity-100 w-full h-full" 
+                        />
 
-            </Link>
+                </Link>
 
                 <div 
                     className="w-full text-center cursor-pointer absolute bg-blue-600 opacity-0 group-hover:opacity-100 bottom-0 left-0 duration-500 ease-in translate-y-0 transition-all py-2"
@@ -65,7 +65,7 @@ export default function ItemCard({product}) {
 
             </div>
 
-            <div className="w-full flex flex-col items-center justify-center gap-y-1">
+            <div className="w-full flex flex-col items-center justify-center ">
 
                 <h2 className="UPPECASE text-xs md:text-sm text-red-600 font-light text-center">{product.team}</h2>
 

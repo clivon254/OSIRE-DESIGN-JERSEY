@@ -172,7 +172,7 @@ export default function Cart() {
                               
                                 <div className="flex-col">
 
-                                <span className="block text-xs font-bold text-black">{item?.team} {item?.season} {item?.status}</span>
+                                <span className="block text-xs font-bold text-black dark:text-slate-200">{item?.team} {item?.season} {item?.status}</span>
 
                                 <span className="block text-xs"><b>Size:</b>{item?.size}</span>
 
@@ -219,7 +219,7 @@ export default function Cart() {
                               </Table.Cell>
 
                               <Table.Cell>
-                              {(cartItems[item._id] * item?.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
+                                {(cartItems[item._id] * item?.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
                               </Table.Cell>
 
                             </Table.Row>
@@ -235,14 +235,14 @@ export default function Cart() {
 
         </div>
 
-        
+        {/* cart totals */}
         <div className="md:w-[40%] space-y-10 px-5">
 
           <Table>
 
             <Table.Head>
 
-              <Table.HeadCell className="text-red-600 text-2xl">CART TOTALS</Table.HeadCell>
+              <Table.HeadCell colSpan={2} className="text-red-600 text-2xl">CART TOTALS</Table.HeadCell>
 
             </Table.Head>
 
@@ -250,9 +250,9 @@ export default function Cart() {
 
               <Table.Row>
 
-                <Table.Cell className="font-bold capitalize text-black">subtotals </Table.Cell>
+                <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">subtotals </Table.Cell>
 
-                <Table.Cell className="font-semibold">
+                <Table.Cell className="font-semibold text-center">
                     {(getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
                 </Table.Cell>
 
@@ -260,9 +260,9 @@ export default function Cart() {
 
               <Table.Row>
 
-                <Table.Cell className="font-bold capitalize text-black">Total </Table.Cell>
+                <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">Total </Table.Cell>
 
-                <Table.Cell className="font-semibold">
+                <Table.Cell className="font-semibold text-center">
                     {(getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
                 </Table.Cell>
 

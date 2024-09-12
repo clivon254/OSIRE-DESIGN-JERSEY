@@ -1,13 +1,18 @@
 
 
-
 import { Button, Checkbox, Label, Radio, TextInput } from 'flowbite-react'
 import React, { useContext, useState } from 'react'
 import { StoreContext } from '../context/store'
+import { useSelector } from 'react-redux'
+import {toast} from "sonner"
+import axios from "axios"
+
 
 export default function CheckOut() {
 
-    const {getTotalCartAmount,products,cartItems} = useContext(StoreContext)
+  const {getTotalCartAmount,products,cartItems,url} = useContext(StoreContext)
+
+  const {currentUser} = useSelector(state => state.user)
 
   const [data ,setData] = useState({})
 
@@ -27,7 +32,7 @@ export default function CheckOut() {
   //onChangePayment
   const onChangePayment = (e) => {
 
-    setPayM({...data,[e.target.name]:e.target.value})
+    setPaymentMethod({...paymentMethod,[e.target.name]:e.target.value})
 
   }
 
@@ -38,7 +43,80 @@ export default function CheckOut() {
 
   }
 
+   //  placeorder
+  const placeorder = async () => {
 
+    let orderItems = [] ;
+
+    products.map((item) => {
+
+        if(cartItems[item._id] > 0)
+        {
+            let itemInfo = item ;
+
+            itemInfo['quantity'] = cartItems[item._id]
+
+            orderItems.push(itemInfo)
+        }
+    })
+
+    console.log(orderItems)
+
+    let orderData = {
+        address:data ,
+        items:orderItems,
+        paymentmethod:paymentMethod,
+        amount:TotalAmount,
+        userId:currentUser?._id
+    }
+
+    console.log(orderData)
+
+    try
+    {
+
+        const res = await axios.post(url + "/api/order/place-order",orderData)
+
+        if(res.data.success)
+        {
+            switch(paymentMethod)
+            {
+                case 'mpesa':
+
+                    toast.success('Prompt has been sent to your phone')
+
+                    break;
+                case 'stripe':
+
+                    const  {session_url} = res.data 
+
+                    window.location.replace(session_url)
+
+                    break;
+                case 'payment after delivery':
+
+                    toast.success('Your order has been completed successfully')
+
+                    break;
+                default:
+                    console.error('Invalid payment method')
+            }
+        }
+
+    }
+    catch(error)
+    {
+        console.log(error.message)
+    }
+
+  }
+
+    console.log(data)
+
+    console.log(shippingMethod)
+
+    console.log(paymentMethod)
+    
   return (
 
     <main className="px-5 py-10">
@@ -130,7 +208,7 @@ export default function CheckOut() {
 
                 </div>
 
-                {/* payment */}
+                {/* shipping */}
                 <div className="">
 
                     <h2 className="subtitle">Shipping method </h2>
@@ -254,11 +332,12 @@ export default function CheckOut() {
 
             </div> 
 
+            {/* order summary */}
             <div className="w-full md:w-[45%] md:sticky left-0 top-0">
 
                 <h2 className="subtitle">Order summary</h2>
 
-                <div className="space-y-10">
+                <div className="space-y-10 my-10">
 
                     {products.map((item,index) => {
 
@@ -268,7 +347,7 @@ export default function CheckOut() {
 
                             <div key={index} className="flex justify-between items-start">
                                 
-                                <div className="flex items-start">
+                                <div className="flex items-start gap-x-4"> 
 
                                     <img 
                                         src={item.imageUrls[0]} 
@@ -278,7 +357,7 @@ export default function CheckOut() {
 
                                     <div className="flex flex-col gap-y-1">
 
-                                        <span className="text-xs font-bold text-black">{item.team} {item.season} {item.status}</span>
+                                        <span className="text-xs font-bold text-black dark:text-slate-200">{item.team} {item.season} {item.status}</span>
 
                                         <span className="text-xs font-bold"> size: {item?.size}</span>
 
@@ -286,13 +365,13 @@ export default function CheckOut() {
 
                                         {item.number && <span className="text-xs font-bold">Number:{item.number}</span>}
 
-                                        <span className="text-xs font-bold text-black">{cartItems[item._id]} X {(item.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}</span>
+                                        <span className="text-xs font-bold text-black dark:text-slate-200">{cartItems[item._id]} X {(item.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}</span>
 
                                     </div>
 
                                 </div>
 
-                                <div className="text-xs font-bold text-black">
+                                <div className="text-xs font-bold text-black dark:text-slate-200">
                                 
                                     {(cartItems[item._id] * item?.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
 
@@ -310,7 +389,7 @@ export default function CheckOut() {
                 <hr className="hr2" />
                 
                 {/* cart total */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between ">
 
                     <span className="text-base font-bold">Cart Total</span>
 
@@ -325,7 +404,7 @@ export default function CheckOut() {
 
                     <span className="text-base font-bold">Delivery Charges</span>
 
-                    <span className="font-semibold">{(0 || shippingMethod ).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}</span>
+                    <span className="font-semibold">{(shippingMethod || 0).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}</span>
 
                 </div>
 
@@ -343,30 +422,73 @@ export default function CheckOut() {
                 <hr className="hr2" />
                 
                 {/* method of payment */}
-                <div className="">
+                <div className="my-10">
 
-                    <h2 className="">Method of payment</h2>
+                    <h2 className="text-xl mb-5 font-semibold">Method of payment</h2>
 
                     <div className="">
 
-                        <Radio
-                            type="radio"
-                            name="payment"
-                            value="payment"
-                            checked={paymentMethod === 'stripe'}
-                            onChange={onChangePayment}
-                        />
+                        {/* stripe */}
+                        <div className="flex items-center gap-x-5">
 
-                        <Label/ >
+                            <Radio
+                                type="radio"
+                                name="paymentmethod"
+                                value="stripe"
+                                onChange={onChangePayment}
+                                
+                            />
+
+                            <Label
+                                 value="stripe"
+                                 className="text-base capitalize"
+                            />
+
+                        </div>
+
+                        {/* mpesa */}
+                        <div className="flex items-center gap-x-5">
+
+                            <Radio
+                                type="radio"
+                                name="paymentmethod"
+                                value="mpesa"
+                                onChange={onChangePayment}
+                            />
+
+                            <Label
+                                 value="mpesa"
+                                 className="text-base capitalize"
+                            />
+
+                        </div>
+
+                        {/* payment after delivery */}
+                        <div className="flex items-center gap-x-5">
+
+                            <Radio
+                                type="radio"
+                                name="paymentmethod"
+                                value="payment after delivery"
+                                onChange={onChangePayment}
+                            />
+
+                            <Label
+                                 value="payment after delivery"
+                                 className="text-base capitalize"
+                            />
+
+                        </div>
 
                     </div>
 
                 </div>
-
+                
+                {/* place order button */}
                 <div className="flex items-center justify-center">
 
                     <Button
-                        // onClick={}
+                        onClick={placeorder}
                         className="md:w-full w-[70%]"
                         gradientDuoTone="pinkToOrange"
                     >
@@ -376,7 +498,6 @@ export default function CheckOut() {
                 </div>
 
             </div>
-
 
         </div>
 

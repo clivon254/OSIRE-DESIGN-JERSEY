@@ -12,9 +12,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRETE_KEY)
 
 export const placeOrder = async (req,res,next) => {
 
-    const frontend_url = "http://localhost:5173"
+    const frontend_url = "http://localhost:5174"
 
-    const {items,address,paymentmethod,amount} = req.body
+    const {items,address,paymentmethod,amount,userId} = req.body
 
     try
     {
@@ -28,12 +28,11 @@ export const placeOrder = async (req,res,next) => {
             address,
             paymentmethod,
             amount,
-            userId:req.user.id
+            userId
         })
 
-        await newOrder.save()
 
-        await User.findByIdAndUpdate(req.user.id, {cartData:{}})
+        await User.findByIdAndUpdate(userId, {cartData:{}})
 
         // handle payment based on the selected Method
         switch(paymentmethod)
@@ -48,12 +47,12 @@ export const placeOrder = async (req,res,next) => {
                     const date = new Date()
 
                     const timestamp = 
-                             date.getFullYear() +
-                             ("0" + (date.getMonth() + 1).slice(-2))
-                             ("0" + date.getDate()).slice(-2) +
-                             ("0" + date.getHours()).slice(-2) +
-                             ("0" + date.getMinutes()).slice(-2) +
-                             ("0" + date.getSeconds()).slice(-2) 
+                             date.getFullYear() + 
+                            ("0" + (date.getMonth() + 1)).slice(-2) +
+                            ("0" + date.getDate()).slice(-2) +
+                            ("0" + date.getHours()).slice(-2) +
+                            ("0" + date.getMinutes()).slice(-2) +
+                            ("0" + date.getSeconds()).slice(-2)  
                     
                     const shortcode = process.env.PAYBILL 
 
@@ -61,7 +60,7 @@ export const placeOrder = async (req,res,next) => {
 
                     const password = new Buffer.from(shortcode + passkey + timestamp).toString("base64")
 
-                    await axios.post(
+                    const response = await axios.post(
                         "https://sandbox.safaricom.co.ke/mpesa/stkpush/v1/processrequest",
                         {    
                             "BusinessShortCode": shortcode,    
@@ -72,7 +71,7 @@ export const placeOrder = async (req,res,next) => {
                             "PartyA":`254${phone}`,    
                             "PartyB":shortcode,    
                             "PhoneNumber":`254${phone}`,    
-                            "CallBackURL": "https://mydomain.com/pat",    
+                            "CallBackURL": "https://30ae-41-209-60-94.ngrok-free.app/api/order/callback",    
                             "AccountReference":"OSIRE DESIGN JERSEY COMPANY",    
                             "TransactionDesc":"Test"
                          },
@@ -81,18 +80,12 @@ export const placeOrder = async (req,res,next) => {
                                 Authorization:`Bearer ${token}`
                             }
                          })
-                         .then((response) => {
-
-                            res.status(200).json(response.data)
-
-                         })
-                         .catch((err) => {
-
-                            console.log(err.message)
-
-                            res.status(400).json(err.message)
-                         })
                          
+
+                     await newOrder.save()
+
+                     res.status(200).json(response.data)
+
                     break;
                 }
                 catch(error)
@@ -111,7 +104,7 @@ export const placeOrder = async (req,res,next) => {
                                 },
                                 unit_amount:item.discountprice
                             },
-                            quantinty:item.quantity
+                            quantity:item.quantity
                         }
                     ))
 
@@ -133,7 +126,9 @@ export const placeOrder = async (req,res,next) => {
                         cancel_url:`${frontend_url}/verify?success=false&orderId=${newOrder._id}`
                     })
 
-                    res.status(200).json({success:true ,session_url:session.url})
+                    await newOrder.save()
+
+                    res.status(200).json({success:true ,session_url:session.url ,newOrder})
 
                     break;
                 }
@@ -143,7 +138,9 @@ export const placeOrder = async (req,res,next) => {
                 }
             case 'payment after delivery':
                 try
-                {
+                {   
+                    await newOrder.save()
+
                     res.status(200).json({success:true , newOrder})
 
                     break;
@@ -249,9 +246,11 @@ export const adminOrders = async (req,res,next) => {
 
 export const userOrders = async (req,res,next) => {
 
+    const {userId} = req.body 
+
     try
     {
-        const orders = await Order.find({userId:req.user.id})
+        const orders = await Order.find({userId:userId})
 
         res.status(200).json({success:true, orders})
     }

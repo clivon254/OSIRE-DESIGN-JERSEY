@@ -66,6 +66,8 @@ export default function StoreContextProvider(props)
 
     }
 
+    console.log(orders)
+
     // fetchProducts
     const fetchUsers = async () => {
 
@@ -86,15 +88,15 @@ export default function StoreContextProvider(props)
     }
 
     // fetchProducts
-    const fetchOrders = async () => {
+    const fetchOrders = async () => { 
 
         try
         {
-            const res = await axios.get(url + "/api/product/get-products")
+            const res = await axios.get(url + "/api/order/admin-order")
 
             if(res.data.success)
             {
-                setProducts(res.data.products)
+                setOrders(res.data.orders)
             }
         }
         catch(error)
@@ -137,6 +139,8 @@ export default function StoreContextProvider(props)
         if(currentUser?._id)
         {
             fetchCartItems()
+
+            fetchOrders()
         }
             
 
@@ -155,7 +159,10 @@ export default function StoreContextProvider(props)
         details,
         setDetails,
         close,
-        setClose
+        setClose,
+        orders,
+        setOrders,
+        fetchOrders
     }
 
     return(

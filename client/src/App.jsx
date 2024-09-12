@@ -18,6 +18,7 @@ import Home from "./pages/Home"
 import FooterComp from "./components/FooterComp"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/CheckOut"
+import VerifyOrder from "./pages/VerifyOrder"
 
 function Layout(){
 
@@ -29,7 +30,7 @@ function Layout(){
 
             <Header />
 
-            <div className="w-full ">
+            <div className="w-full min-h-[80vh]">
 
               <Outlet />
 
@@ -68,6 +69,8 @@ export default function App() {
               <Route path="/search" element={<Search/>}/>
 
               <Route path="/cart" element={<Cart/>}/>
+
+              <Route path="/verify" element={<VerifyOrder/>}/>
 
               <Route path="/check-out" element={<CheckOut/>}/>
 
