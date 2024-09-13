@@ -106,6 +106,18 @@ export default function DashSidebar() {
 
                     </Link>
 
+                    <Link to="/coupon">
+
+                        <Sidebar.Item
+                          icon={HiDocumentAdd}
+                          as="div"
+                          active={window.location.pathname === "/coupon"}
+                        >
+                            coupon
+                        </Sidebar.Item>
+
+                    </Link>
+
                     <Sidebar.Item
                           icon={HiLogout}
                           as="div"

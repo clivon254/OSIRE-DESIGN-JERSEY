@@ -33,6 +33,14 @@ export default function Dashboard() {
               
             </div>
 
+             <div className="shadow p-3 dark:border border-slate-800 rounded">
+
+              <span className="block text-xl font-semibold">Products out of stock</span>
+
+              <span className="block font-bold text-2xl">{0}</span>
+              
+            </div>
+
             <div className="shadow p-3 dark:border border-slate-800 rounded">
 
               <span className="block text-xl font-semibold">Total Users</span>

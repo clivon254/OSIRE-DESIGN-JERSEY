@@ -15,7 +15,9 @@ const couponSchema = new mongoose.Schema({
 
     expiresAt:{type:Date },
 
-})
+},
+ {timestamps:true}
+)
 
 const Coupon = mongoose.model('Coupon', couponSchema)
 

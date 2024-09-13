@@ -66,7 +66,7 @@ export default function StoreContextProvider(props)
 
     }
 
-    console.log(orders)
+
 
     // fetchProducts
     const fetchUsers = async () => {
@@ -146,7 +146,7 @@ export default function StoreContextProvider(props)
 
     },[currentUser?._id])
     
-    console.log(orders)
+   
 
     const contextValue = {
         url,

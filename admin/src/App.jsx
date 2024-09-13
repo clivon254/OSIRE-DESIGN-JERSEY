@@ -18,6 +18,7 @@ import ResetPassword from "./pages/ResetPassword"
 import DashSidebar from "./components/DashSidebar"
 import ListOfOrders from "./pages/ListOfOrders"
 import Header from "./components/Header"
+import Coupon from "./pages/Coupon"
 
 function Layout(){
 
@@ -85,6 +86,8 @@ export default function App() {
               <Route path="/reveiw" element={<Reveiw/>}/>
 
               <Route path="/search" element={<Search/>}/>
+
+              <Route path="/coupon" element={<Coupon/>}/>
 
           </Route>
 

@@ -307,11 +307,11 @@ export default function AddProduct() {
 
                   <option value="selling version">selling version</option>
 
-                  <option value="Authentic">Authentic</option>
+                  <option value="AUTHENTIC">AUTHENTIC</option>
 
-                  <option value="Retro">Retro</option>
+                  <option value="RETRO">RETRO</option>
                   
-                  <option value="Kids">Kids</option>
+                  <option value="KIDS">KIDS</option>
                   
                 </Select>
 
