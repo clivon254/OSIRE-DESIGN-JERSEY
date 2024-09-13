@@ -30,7 +30,7 @@ export default function ProductDetail() {
   const {url,cartItems,setCartItems} = useContext(StoreContext)
 
   const [formData ,setFormData] = useState({
-    userId:currentUser._id,
+    userId:currentUser?._id,
     itemId:params.productId
   })
 

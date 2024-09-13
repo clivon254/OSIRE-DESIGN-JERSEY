@@ -66,7 +66,7 @@ export default function App() {
 
               <Route path="/profile" element={<Profile/>}/>
 
-              <Route path="/search" element={<Search/>}/>
+              <Route path="/shop" element={<Search/>}/>
 
               <Route path="/cart" element={<Cart/>}/>
 

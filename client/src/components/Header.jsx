@@ -1,7 +1,7 @@
 
 
 import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Logo from './Logo'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
@@ -25,6 +25,8 @@ export default function Header() {
   const dispatch = useDispatch()
 
   const [isOpen ,setIsOpen] = useState(false)
+
+  const [isSticky ,setIsSticky] = useState(false)
 
   const navigate = useNavigate()
 
@@ -65,10 +67,39 @@ export default function Header() {
 
   }
 
+  useEffect(() => {
+   
+
+    let prevScrollPosition = 0;
+
+    const handleScroll = () => {
+
+        const scrollPosition = window.scrollY;
+
+        const scrollDirection = scrollPosition - prevScrollPosition;
+
+        prevScrollPosition = scrollPosition; // Update prevScrollPosition
+
+        if (scrollDirection < 0 && scrollPosition > 0) {
+          setIsSticky(true);
+        } else if (scrollDirection > 0) {
+          setIsSticky(false);
+        }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+
+  }, []);
+
+
 
   return (
 
-    <Navbar className="py-5 border-b shadow-md">
+    <Navbar className={`py-5 border-b shadow-md transition duration-500 ease-in-out ${isSticky ? 'sticky top-0' : ''}`}>
 
       <div className="md:hidden">
 

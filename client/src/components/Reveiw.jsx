@@ -21,7 +21,7 @@ export default function Reveiw({reveiws,productId}) {
    const [error, setError] = useState(null)
     
    const [formData , setFormData] = useState({
-    userId:currentUser._id
+    userId:currentUser?._id
    })
 
    

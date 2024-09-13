@@ -29,7 +29,7 @@ const productSchema = new mongoose.Schema({
 
     averageRating:{type:Number ,default:5},
 
-    imageUrls:{type:Array , default:[]}
+    imageUrls:{type:Array , required:true}
 },
  {timestamps:true})
 

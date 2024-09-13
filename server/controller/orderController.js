@@ -234,7 +234,7 @@ export const adminOrders = async (req,res,next) => {
     {
         const orders = await Order.find({})
 
-        res.status({success:true , orders})
+        res.status(200).json({success:true , orders})
     }
     catch(error)
     {

@@ -145,7 +145,8 @@ export default function StoreContextProvider(props)
             
 
     },[currentUser?._id])
-
+    
+    console.log(orders)
 
     const contextValue = {
         url,

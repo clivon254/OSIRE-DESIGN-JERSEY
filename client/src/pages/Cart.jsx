@@ -1,13 +1,13 @@
 
 
 import { Button, ButtonGroup, Table, TextInput , } from 'flowbite-react'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { StoreContext } from '../context/store'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import axios from "axios"
 import {toast} from "sonner"
-import { MdTag } from 'react-icons/md'
+import { MdCheck, MdTag } from 'react-icons/md'
 import SlideProducts from '../components/SlideProducts'
 
 
@@ -15,8 +15,15 @@ export default function Cart() {
    
   const {currentUser} = useSelector(state => state.user)
 
-  const {url,products ,cartItems,setCartItems,getTotalCartAmount} = useContext(StoreContext)
+  const {url,products ,cartItems,setTotalAmounts,setCartItems,getTotalCartAmount,totalAmounts,couponApplied,setCouponApplied} = useContext(StoreContext)
   
+  const [code ,setCode] = useState('')
+
+  const  [datas , setDatas] = useState({
+    code:"",
+    totalCartAmount:getTotalCartAmount()
+})
+
   const navigate = useNavigate()
 
    // increase cart
@@ -79,11 +86,65 @@ export default function Cart() {
     }
 
     // apply Coupon
-    const applyCoupon = async () => {
+    const ApplyCoupons = async () => {
+        
+      try
+      {
+          console.log("working")
 
+          const res = await axios.post(url + "/api/coupon/apply-coupon",datas)
+
+          if(res.data.success)
+          {
+              setTotalAmounts(res.data.newTotalCartAmount)
+
+              localStorage.setItem('totalAmounts', JSON.stringify(res.data.newTotalCartAmount));
+
+              setCouponApplied(true)
+
+          }
+          else
+          {
+              console.log("incorrect code")
+
+              console.log(res.data.message)
+          }
+      }
+      catch(error)
+      {
+          console.log(error.message)
+      }
+
+  } 
+
+    // handleCouponChange
+    const handleCouponChange = async (e) => {
+
+        setDatas({...datas, [e.target.name]:e.target.value})
 
     }
-  
+
+    useEffect(() => {
+
+      const userTotalAmountsKey = `totalAmounts_${currentUser?._id}`;
+
+      // Store totalAmounts in localStorage with user-specific key
+      localStorage.setItem(userTotalAmountsKey, JSON.stringify(totalAmounts));
+
+      // Retrieve totalAmounts from localStorage with user-specific key
+      const storedTotalAmounts = localStorage.getItem(userTotalAmountsKey);
+      if (storedTotalAmounts) {
+        setTotalAmounts(JSON.parse(storedTotalAmounts));
+      }
+
+      // When user logs out, remove the user-specific totalAmounts value from localStorage
+      localStorage.removeItem(userTotalAmountsKey);
+
+    }, []);
+
+    console.log(datas)
+
+    console.log(totalAmounts)
 
   return (
 
@@ -263,7 +324,7 @@ export default function Cart() {
                 <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">Total </Table.Cell>
 
                 <Table.Cell className="font-semibold text-center">
-                    {(getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
+                    {(totalAmounts || getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
                 </Table.Cell>
 
               </Table.Row>
@@ -289,7 +350,8 @@ export default function Cart() {
             </Table.Body>
 
           </Table>
-            
+          
+          {/* apply coupons */}
           <div className="">
 
             <h2 className="flex items-center gap-x-5 text-2xl font-semibold "><MdTag/> Coupon</h2>
@@ -301,16 +363,30 @@ export default function Cart() {
               <TextInput
                 type="text"
                 placeholder="Enter your coupon code"
-                name="coupon"
+                name="code"
+                vlaue={datas.code}
+                onChange={handleCouponChange}
+                required
               />
-
-              <Button
-                gradientDuoTone="purpleToBlue"
-                outline
-                className='w-[70%] md:w-full'
-              >
-                Apply Coupon
-              </Button>
+              
+              {
+                couponApplied ? 
+                  <Button
+                  gradientDuoTone="purpleToBlue"
+                  className='w-[70%] md:w-full flex items-center gap-x-3'
+                >
+                  coupon Applied <MdCheck size={20}/>
+                </Button>
+              :
+                <Button
+                  gradientDuoTone="purpleToBlue"
+                  className='w-[70%] md:w-full '
+                  outline
+                  onClick={() => ApplyCoupons()}
+                >
+                  Apply coupon
+                </Button>
+              }
             
             </div>
 

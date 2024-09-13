@@ -10,7 +10,7 @@ import axios from "axios"
 
 export default function CheckOut() {
 
-  const {getTotalCartAmount,products,cartItems,url} = useContext(StoreContext)
+  const {getTotalCartAmount,products,cartItems,url,totalAmounts} = useContext(StoreContext)
 
   const {currentUser} = useSelector(state => state.user)
 
@@ -20,7 +20,7 @@ export default function CheckOut() {
 
   const [paymentMethod , setPaymentMethod] = useState(null)
   
-  let TotalAmount = Number(getTotalCartAmount()) + Number(shippingMethod || 0);
+  let TotalAmount = Number(totalAmounts || getTotalCartAmount()) + Number(shippingMethod || 0);
 
   //onChangeData
   const onChangeData = (e) => {
@@ -393,7 +393,7 @@ export default function CheckOut() {
 
                     <span className="text-base font-bold">Cart Total</span>
 
-                    <span className="font-semibold">{getTotalCartAmount().toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}</span>
+                    <span className="font-semibold">{(totalAmounts || getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}</span>
 
                 </div>
 

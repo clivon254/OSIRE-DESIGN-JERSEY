@@ -47,8 +47,6 @@ export default function ListOfOrders() {
 
             <Table.HeadCell></Table.HeadCell>
 
-            <Table.HeadCell>order Id</Table.HeadCell>
-
             <Table.HeadCell>items</Table.HeadCell>
 
             <Table.HeadCell>no items</Table.HeadCell>
@@ -69,10 +67,6 @@ export default function ListOfOrders() {
                 <Table.Row>
 
                   <Table.Cell>{index + 1}</Table.Cell>
-
-                  <Table.Cell>
-                    #{order._id}
-                  </Table.Cell>
 
                   <Table.Cell>
 
@@ -101,12 +95,26 @@ export default function ListOfOrders() {
                   </Table.Cell>
 
                   <Table.Cell>
-                    
+                    <div className="">
+
+                      <span className="block text-xs">{`${order.address.firstName} ${order.address.lastName}`}</span>
+                      
+                      <span className="block text-xs">{order.address.city} </span>
+                      
+                      <span className="block text-xs">{order.address.address}</span>
+
+                      <span className="block text-xs font-bold">{order.address.phone}</span>
+
+                    </div>
                   </Table.Cell>
 
                   <Table.Cell>
 
-                      <Select>
+                      <Select
+                        name="status"
+                        value={order.status}
+                        onChange={(event) => statusHandler(event,order._id)}
+                      >
 
                         <option value="order processing">order processing</option>
 

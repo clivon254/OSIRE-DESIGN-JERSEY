@@ -12,12 +12,12 @@ export const addProduct = async (req,res,next) => {
     //     return next(errorHandler(403,"only an Admin can add product"))
     // }
 
-    const {team,status,season,league,tag,instock,wholesale,regularprice,discountprice} = req.body 
+    const {team,status,season,league,tag,instock,wholesale,regularprice,discountprice,imageUrls} = req.body 
 
     try
     {
         const product = new Product({
-            team,status,season,league,tag,instock,wholesale,regularprice,discountprice
+            team,status,season,league,tag,instock,wholesale,regularprice,discountprice,imageUrls
         })
 
         await product.save()

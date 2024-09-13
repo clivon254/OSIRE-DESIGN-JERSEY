@@ -4,6 +4,13 @@
 @tailwind utilities;
 
 
+.sticky {
+    position:sticky;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
 .contain{
     @apply shadow-xl rounded-xl border border-gray-100 dark:border-gray-600 w-full mx-auto my-5 px-6 py-4
 }

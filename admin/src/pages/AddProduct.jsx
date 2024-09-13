@@ -305,6 +305,8 @@ export default function AddProduct() {
 
                   <option value=""></option>
 
+                  <option value="selling version">selling version</option>
+
                   <option value="Authentic">Authentic</option>
 
                   <option value="Retro">Retro</option>

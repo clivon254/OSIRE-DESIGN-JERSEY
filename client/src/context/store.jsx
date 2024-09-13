@@ -37,6 +37,10 @@ export default function StoreContextProvider(props)
 
     const [details ,setDetails] = useState({})
 
+    const [totalAmounts ,setTotalAmounts] = useState(null)
+
+    const [couponApplied, setCouponApplied] = useState(false)
+
     const veiw = (product) => {
 
         setDetails({...product})
@@ -129,24 +133,6 @@ export default function StoreContextProvider(props)
 
    }
 
-    // apply Coupon
-    const ApplyCoupons = async (code) => {
-
-        let data = {
-            code:code,
-            totalCartAmount:getTotalCartAmount()
-        }
-
-        try
-        {
-            const res = await axios.post(url + "/api/cart/apply-coupon",data)
-        }
-        catch(error)
-        {
-            console.log(error.message)
-        }
-
-    } 
 
    // Total Amount
    const getTotalCartAmount = () => {
@@ -170,7 +156,6 @@ export default function StoreContextProvider(props)
         return totalAmount
    }
 
-  
 
     useEffect(() => {
 
@@ -204,7 +189,11 @@ export default function StoreContextProvider(props)
         setClose,
         getTotalCartAmount,
         orders,
-        setOrders
+        setOrders,
+        totalAmounts,
+        setTotalAmounts,
+        couponApplied,
+        setCouponApplied
     }
 
    

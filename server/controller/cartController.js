@@ -49,6 +49,11 @@ export const addToCart = async (req,res,next) => {
             return next(errorHandler(404,"Product not found"))
         }
 
+        // if(userData)
+        // {
+        //     return next(errorHandler(400 ,"User not found"))
+        // }
+
         let cartData = await userData.cartData ;
 
         if(!cartData[itemId])
