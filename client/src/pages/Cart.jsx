@@ -152,9 +152,9 @@ export default function Cart() {
 
       {cartItems.length === 0 && (
 
-        <div className="flex flex-col justify-center gap-y-5">
+        <div className="flex flex-col justify-center items-center gap-y-5 my-20">
 
-          <p className="text-xl font-semibold">Your cart is empty</p>
+          <p className="text-2xl font-semibold">Your cart is empty</p>
 
           <div className="">
 
@@ -162,7 +162,7 @@ export default function Cart() {
               gradientDuoTone="pinkToOrange" 
             >
 
-              <Link to="">
+              <Link to="/shop">
                 RETURN TO SHOPPING
               </Link>
 
@@ -174,227 +174,233 @@ export default function Cart() {
 
       )}
 
-      <div className="w-full flex flex-col md:flex-row md:divide-x-4 gap-x-10 gap-y-5 ">
+      
+        {Object.keys(cartItems).length > 0 && (
 
-        {/* cart table */}
-        <div className="md:w-[60%] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+          <div className="w-full flex flex-col md:flex-row md:divide-x-4 gap-x-10 gap-y-5 ">
 
-            <Table>
+            {/* cart table */}
+            <div className="md:w-[60%] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
 
-                <Table.Head className="uppercase text-red-600 ">
+                <Table>
 
-                  <Table.HeadCell>
-                    Product
-                  </Table.HeadCell>
+                    <Table.Head className="uppercase text-red-600 ">
 
-                  <Table.HeadCell>
-                    description
-                  </Table.HeadCell>
+                      <Table.HeadCell>
+                        Product
+                      </Table.HeadCell>
 
-                  <Table.HeadCell  className="">
-                    price
-                  </Table.HeadCell>
+                      <Table.HeadCell>
+                        description
+                      </Table.HeadCell>
 
-                  <Table.HeadCell>
-                    quantity
-                  </Table.HeadCell>
+                      <Table.HeadCell  className="">
+                        price
+                      </Table.HeadCell>
 
-                  <Table.HeadCell>
-                    subtotal
-                  </Table.HeadCell>
+                      <Table.HeadCell>
+                        quantity
+                      </Table.HeadCell>
+
+                      <Table.HeadCell>
+                        subtotal
+                      </Table.HeadCell>
+
+                    </Table.Head>
+
+                    {products.map((item,index) => {
+
+                      if(cartItems[item._id] > 0)
+                      {
+                          return(   
+
+                            <Table.Body key={index}>
+
+                                <Table.Row>
+
+                                  <Table.Cell className="flex gap-x-5">
+                                  
+                                    <Link to={`/product-details/${item._id}`}>
+
+                                    <img 
+                                      src={item?.imageUrls[0]}
+                                      alt="" 
+                                      className="h-20 w-20" 
+                                    /> 
+
+                                    </Link>
+
+                                  </Table.Cell>
+
+                                  <Table.Cell className="">
+                                  
+                                    <div className="flex-col">
+
+                                    <span className="block text-xs font-bold text-black dark:text-slate-200">{item?.team} {item?.season} {item?.status}</span>
+
+                                    <span className="block text-xs"><b>Size:</b>{item?.size}</span>
+
+                                    {item?.name && <span className="block text-xs"><b>Name:</b>{item?.name}</span>}
+
+                                    {item?.number && <span className="block text-xs"><b>Number:</b>{item?.number}</span>}
+
+                                    </div>
+
+                                  </Table.Cell>
+                                  
+                                  <Table.Cell className="text-center">
+
+                                    <span className="">
+
+                                      {item?.discountprice?.toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
+                                  
+                                    </span>
+
+                                  </Table.Cell>
+
+                                  <Table.Cell className="">
+
+                                  <div className="flex">
+
+                                    <span 
+                                        onClick={() => increaseCart(item._id)} 
+                                        className="border p-1 font-black flex items-center justify-center cursor-pointer"
+                                    >
+                                      +
+                                    </span>
+
+                                    <span className="border p-1 font-black flex items-center justify-center ">{cartItems[item._id]}</span>
+
+                                    <span
+                                        onClick={() => removeCart(item._id)} 
+                                        className="border p-1 font-black flex items-center justify-center cursor-pointer"
+                                    >
+                                      -
+                                    </span>
+
+                                  </div>
+
+                                  </Table.Cell>
+
+                                  <Table.Cell>
+                                    {(cartItems[item._id] * item?.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
+                                  </Table.Cell>
+
+                                </Table.Row>
+
+                            </Table.Body>
+                            
+                          )
+                      }
+                      
+                    })}
+
+                </Table>
+
+            </div>
+
+            {/* cart totals */}
+            <div className="md:w-[40%] space-y-10 px-5">
+
+              <Table>
+
+                <Table.Head>
+
+                  <Table.HeadCell colSpan={2} className="text-red-600 text-2xl">CART TOTALS</Table.HeadCell>
 
                 </Table.Head>
 
-                {products.map((item,index) => {
+                <Table.Body>
 
-                  if(cartItems[item._id] > 0)
-                  {
-                      return(   
+                  <Table.Row>
 
-                        <Table.Body key={index}>
+                    <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">subtotals </Table.Cell>
 
-                            <Table.Row>
+                    <Table.Cell className="font-semibold text-center">
+                        {(getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
+                    </Table.Cell>
 
-                              <Table.Cell className="flex gap-x-5">
-                              
-                                <Link to={`/product-details/${item._id}`}>
+                  </Table.Row>
 
-                                <img 
-                                  src={item?.imageUrls[0]}
-                                  alt="" 
-                                  className="h-20 w-20" 
-                                /> 
+                  <Table.Row>
 
-                                </Link>
+                    <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">Total </Table.Cell>
 
-                              </Table.Cell>
+                    <Table.Cell className="font-semibold text-center">
+                        {(totalAmounts || getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
+                    </Table.Cell>
 
-                              <Table.Cell className="">
-                              
-                                <div className="flex-col">
+                  </Table.Row>
 
-                                <span className="block text-xs font-bold text-black dark:text-slate-200">{item?.team} {item?.season} {item?.status}</span>
+                  <Table.Row>
 
-                                <span className="block text-xs"><b>Size:</b>{item?.size}</span>
+                    <Table.Cell colSpan={2}>
 
-                                {item?.name && <span className="block text-xs"><b>Name:</b>{item?.name}</span>}
+                      <Button 
+                        className="w-full"
+                        gradientDuoTone="pinkToOrange"
+                        onClick={() => navigate('/check-out')}
+                      >
 
-                                {item?.number && <span className="block text-xs"><b>Number:</b>{item?.number}</span>}
+                        PROCEED TO CHECKOUT
 
-                                </div>
+                      </Button>
+                    
+                    </Table.Cell>
 
-                              </Table.Cell>
-                              
-                              <Table.Cell className="text-center">
+                  </Table.Row>
 
-                                <span className="">
+                </Table.Body>
 
-                                  {item?.discountprice?.toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
-                              
-                                </span>
-
-                              </Table.Cell>
-
-                              <Table.Cell className="">
-
-                              <div className="flex">
-
-                                <span 
-                                    onClick={() => increaseCart(item._id)} 
-                                    className="border p-1 font-black flex items-center justify-center cursor-pointer"
-                                >
-                                  +
-                                </span>
-
-                                <span className="border p-1 font-black flex items-center justify-center ">{cartItems[item._id]}</span>
-
-                                <span
-                                    onClick={() => removeCart(item._id)} 
-                                    className="border p-1 font-black flex items-center justify-center cursor-pointer"
-                                >
-                                  -
-                                </span>
-
-                              </div>
-
-                              </Table.Cell>
-
-                              <Table.Cell>
-                                {(cartItems[item._id] * item?.discountprice).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
-                              </Table.Cell>
-
-                            </Table.Row>
-
-                        </Table.Body>
-                        
-                      )
-                  }
-                  
-                })}
-
-            </Table>
-
-        </div>
-
-        {/* cart totals */}
-        <div className="md:w-[40%] space-y-10 px-5">
-
-          <Table>
-
-            <Table.Head>
-
-              <Table.HeadCell colSpan={2} className="text-red-600 text-2xl">CART TOTALS</Table.HeadCell>
-
-            </Table.Head>
-
-            <Table.Body>
-
-              <Table.Row>
-
-                <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">subtotals </Table.Cell>
-
-                <Table.Cell className="font-semibold text-center">
-                    {(getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
-                </Table.Cell>
-
-              </Table.Row>
-
-              <Table.Row>
-
-                <Table.Cell className="font-bold capitalize text-black dark:text-slate-200">Total </Table.Cell>
-
-                <Table.Cell className="font-semibold text-center">
-                    {(totalAmounts || getTotalCartAmount()).toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
-                </Table.Cell>
-
-              </Table.Row>
-
-              <Table.Row>
-
-                <Table.Cell colSpan={2}>
-
-                  <Button 
-                    className="w-full"
-                    gradientDuoTone="pinkToOrange"
-                    onClick={() => navigate('/check-out')}
-                  >
-
-                    PROCEED TO CHECKOUT
-
-                  </Button>
-                
-                </Table.Cell>
-
-              </Table.Row>
-
-            </Table.Body>
-
-          </Table>
-          
-          {/* apply coupons */}
-          <div className="">
-
-            <h2 className="flex items-center gap-x-5 text-2xl font-semibold "><MdTag/> Coupon</h2>
-
-            <hr className="font-bold my-3 bg-slate-500" />
-            
-            <div className="space-y-4">
-
-              <TextInput
-                type="text"
-                placeholder="Enter your coupon code"
-                name="code"
-                vlaue={datas.code}
-                onChange={handleCouponChange}
-                required
-              />
+              </Table>
               
-              {
-                couponApplied ? 
-                  <Button
-                  gradientDuoTone="purpleToBlue"
-                  className='w-[70%] md:w-full flex items-center gap-x-3'
-                >
-                  coupon Applied <MdCheck size={20}/>
-                </Button>
-              :
-                <Button
-                  gradientDuoTone="purpleToBlue"
-                  className='w-[70%] md:w-full '
-                  outline
-                  onClick={() => ApplyCoupons()}
-                >
-                  Apply coupon
-                </Button>
-              }
-            
+              {/* apply coupons */}
+              <div className="">
+
+                <h2 className="flex items-center gap-x-5 text-2xl font-semibold "><MdTag/> Coupon</h2>
+
+                <hr className="font-bold my-3 bg-slate-500" />
+                
+                <div className="space-y-4">
+
+                  <TextInput
+                    type="text"
+                    placeholder="Enter your coupon code"
+                    name="code"
+                    vlaue={datas.code}
+                    onChange={handleCouponChange}
+                    required
+                  />
+                  
+                  {
+                    couponApplied ? 
+                      <Button
+                      gradientDuoTone="purpleToBlue"
+                      className='w-[70%] md:w-full flex items-center gap-x-3'
+                    >
+                      coupon Applied <MdCheck size={20}/>
+                    </Button>
+                  :
+                    <Button
+                      gradientDuoTone="purpleToBlue"
+                      className='w-[70%] md:w-full '
+                      outline
+                      onClick={() => ApplyCoupons()}
+                    >
+                      Apply coupon
+                    </Button>
+                  }
+                
+                </div>
+
+              </div>
+
             </div>
 
           </div>
 
-        </div>
-
-      </div>
+        )}
+      
       
       {/* featured Products */}
       <div className="my-10 space-y-5">

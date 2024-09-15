@@ -37,11 +37,12 @@
 
 
 /* PRODUCT DETAILS IMAGES */
-.productCarousel.carousel-root {
+.productCarousel.carousel-root.custom-z-index {
     
-    @apply flex  flex-col gap-3 
+    @apply flex  flex-col gap-3  z-[50] !important;
 
 }
+
 
 .productCarousel.carousel-root .carousel {
 
@@ -51,12 +52,12 @@
 
 .productCarousel.carousel-root .carousel.carousel-slider {
     
-    @apply h-80 p-2 shadow
+    @apply h-80 p-2 shadow z-[50] !important
 }
 
 .productCarousel.carousel-root .carousel.carousel-slider .slider-wrapper img {
    
-    @apply w-full h-80 
+    @apply w-full h-80 z-[50] !important
 }
 
 .productCarousel.carousel-root .carousel .thumbs-wrapper {
@@ -73,7 +74,7 @@
 
 .productCarousel.carousel-root .carousel .thumb img {
     
-    @apply w-full h-full object-cover object-center 
+    @apply w-full h-full object-cover object-center z-[50] !important
 
 }
 

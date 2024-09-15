@@ -87,7 +87,7 @@ export default function Header() {
   return (
     <>
 
-        <Navbar className="border-b sticky top-0 z-[100] p-5">
+        <Navbar className="border-b sticky top-0 z-[100] opacity-100 p-5 dark:bg-black">
 
             <div className="">
                 {

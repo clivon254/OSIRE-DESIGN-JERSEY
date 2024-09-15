@@ -43,13 +43,15 @@ export default function StoreContextProvider(props)
 
     const veiw = (product) => {
 
-        setDetails({...product})
+        // setDetails({...product})
 
-        setClose(true)
+        // setClose()
 
-        console.log("yes am worling")
+        // console.log("yes am worling")
 
     }
+
+    const [Loading ,setLoading] = useState(false)
 
 
     // fetchProducts
@@ -57,11 +59,15 @@ export default function StoreContextProvider(props)
 
         try
         {
+            setLoading(true)
+
             const res = await axios.get(url + "/api/product/get-products")
 
             if(res.data.success)
             {
                 setProducts(res.data.products)
+
+                setLoading(false)
             }
         }
         catch(error)
@@ -174,7 +180,7 @@ export default function StoreContextProvider(props)
     },[currentUser?._id])
 
 
-    const contextValue = {
+    const contextValue = { 
         url,
         products,
         setProducts,
@@ -193,7 +199,9 @@ export default function StoreContextProvider(props)
         totalAmounts,
         setTotalAmounts,
         couponApplied,
-        setCouponApplied
+        setCouponApplied,
+        setLoading,
+        Loading
     }
 
    

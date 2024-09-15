@@ -197,7 +197,7 @@ export default function ProductDetail() {
 
   return (
 
-    <main className="p-5 w-full">
+    <main className="py-5 px-5 w-full">
 
       {loading && (
 
@@ -215,9 +215,9 @@ export default function ProductDetail() {
 
       )}
 
-      {product && (
+      {!loading && product && (
 
-        <div className="contain">
+        <div className="">
           
           {/*  product*/}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 my-10">
@@ -232,7 +232,8 @@ export default function ProductDetail() {
                   showIndicators={false}
                   showStatus={false}
                   thumbWidth={80}
-                  className="productCarousel "
+                  className="productCarousel custom-z-index"
+                  style={{ zIndex: 10}} 
                 >
                   {
                     product?.imageUrls?.map((image,index) => (
@@ -267,7 +268,7 @@ export default function ProductDetail() {
               {/* title */}
               <div className="">
                 
-                <h3 className="text-3xl lg:text-4xl font-semibold text-gray-600">{product.team} {product.season} {product.status}</h3>
+                <h3 className="text-3xl lg:text-4xl font-semibold text-gray-600 dark:text-gray-300">{product.team} {product.season} {product.status}</h3>
 
               </div>
               
@@ -278,7 +279,7 @@ export default function ProductDetail() {
                   {product?.regularprice?.toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
                 </span>
 
-                <span className="text-black">
+                <span className="text-black dark:text-slate-100">
                   {product?.discountprice?.toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}
                 </span>
 
@@ -385,7 +386,6 @@ export default function ProductDetail() {
 
           </div>
 
-        
           {/* others */}
           <div className=" w-full py-10">
               
@@ -396,7 +396,7 @@ export default function ProductDetail() {
                 
               <h2 className="text-center text-red-500">Team: {product.team}</h2>
 
-              <h2 className="text-center text-2xl text-slate-700 font-semibold">
+              <h2 className="text-center text-2xl text-slate-700 font-semibold dark:text-gray-300">
                   Now on Sale at Only
                 <span className="ml-4 text-3xl text-red-500 italic">
                   {product?.discountprice?.toLocaleString('en-KE', { style: 'currency', currency: 'KES' })}

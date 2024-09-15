@@ -10,7 +10,7 @@ export default function Divider({title,bg}) {
 
         <span className=" hidden sm:block border w-full"/>
 
-        <span className={`block uppercase w-full text-3xl md:text-4xl  px-2 ${bg ? bg : "dark:text-slate-200 text-slate-700 "} whitespace-nowrap  tracking-wider font-bold`}>{title}</span>
+        <span className={`block uppercase w-full text-2xl  md:text-3xl  lg:text-4xl  px-2 ${bg ? bg : "dark:text-slate-200 text-slate-700 "}  font-black`}>{title}</span>
 
         <span className="hidden sm:block border w-full"/>
 

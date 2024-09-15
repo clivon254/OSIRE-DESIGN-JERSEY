@@ -7,7 +7,7 @@ import axios from "axios"
 import { useContext } from "react"
 import { StoreContext } from "../context/store"
 import { useEffect } from "react"
-
+import {toast} from "sonner"
 
 export default function Coupon() {
 
@@ -33,7 +33,7 @@ export default function Coupon() {
         {
             console.log("ok")
 
-            const res = await axios.get(url + "/api/coupon/generate-coupon",data)
+            const res = await axios.post(url + "/api/coupon/generate-coupon",data)
 
             if(res.data.success)
             {
@@ -41,7 +41,7 @@ export default function Coupon() {
                 
                 setData({})
 
-                handleCoupons()
+                getCoupons()
             }
             else
             {
@@ -57,7 +57,7 @@ export default function Coupon() {
     }
 
     // handleGetCoupons
-    const handleCoupons = async () => {
+    const getCoupons = async () => {
 
         try
         {
@@ -77,7 +77,7 @@ export default function Coupon() {
 
     useEffect(() => {
 
-        handleCoupons()
+        getCoupons()
 
     },[])
 

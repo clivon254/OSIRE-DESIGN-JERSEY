@@ -50,7 +50,7 @@ export default function DashSidebar() {
 
   return (
 
-    <Sidebar className="w-full h-full">
+    <Sidebar className="w-full h-full mt-10">
 
         <Sidebar.Items>
 

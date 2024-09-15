@@ -69,9 +69,9 @@ export default function Reveiw({reveiws,productId}) {
 
   return (
 
-    <div className="">
+    <div className="my-10">
 
-        <h2 className="">Reveiws ({reveiws.length})</h2>
+        <h2 className="subtitle">Reveiws ({reveiws.length})</h2>
 
         {
             currentUser ?
@@ -98,7 +98,7 @@ export default function Reveiw({reveiws,productId}) {
             :
             (
                 <div className="text-sm text-teal-500 my-5 flex gap-x-3">
-                    You must be signed in to add a revei
+                    You must be signed in to add a reveiw
 
                     <Link to="/sign-in" className="text-amber-500 hover:underline">sign in</Link>
 
@@ -112,6 +112,10 @@ export default function Reveiw({reveiws,productId}) {
                <form onSubmit={handleSubmit} className="max-w-xl border p-3 rounded-md space-y-5">
 
                     <div className="flex flex-col gap-2">
+
+                        <span className="text-xs text-red-500 font-semibold">
+                            Rate first
+                        </span>
 
                         <Rating 
                             initialRating={formData.rating}

@@ -96,8 +96,6 @@ export default function ListOfProducts() {
 
       <div className="p-5">
 
-        
-
           <h2 className="title">products</h2>
 
           
@@ -326,9 +324,6 @@ export default function ListOfProducts() {
 
         </div>
       
-
-        
-
       <Modal
           show={showModal}
           onClose={() => setShowModal(false)}

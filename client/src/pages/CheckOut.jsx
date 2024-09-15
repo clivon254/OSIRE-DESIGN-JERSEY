@@ -1,11 +1,12 @@
 
 
-import { Button, Checkbox, Label, Radio, TextInput } from 'flowbite-react'
+import { Button, Checkbox, Label, Radio, Spinner, TextInput } from 'flowbite-react'
 import React, { useContext, useState } from 'react'
 import { StoreContext } from '../context/store'
 import { useSelector } from 'react-redux'
 import {toast} from "sonner"
 import axios from "axios"
+import {useNavigate} from "react-router-dom"
 
 
 export default function CheckOut() {
@@ -19,20 +20,23 @@ export default function CheckOut() {
   const [shippingMethod , setShippingMethod] = useState(null)
 
   const [paymentMethod , setPaymentMethod] = useState(null)
+
+  const [prompt , setPrompt] = useState(false)
+
+  const [Loading ,setLoading] = useState(false)
+  
+  const [error, setError] = useState(null)
+
+  const [completeOrder, setCompleteOrder] = useState(false)
   
   let TotalAmount = Number(totalAmounts || getTotalCartAmount()) + Number(shippingMethod || 0);
+
+  const navigate = useNavigate()
 
   //onChangeData
   const onChangeData = (e) => {
 
     setData({...data,[e.target.name]:e.target.value})
-
-  }
-
-  //onChangePayment
-  const onChangePayment = (e) => {
-
-    setPaymentMethod({...paymentMethod,[e.target.name]:e.target.value})
 
   }
 
@@ -60,53 +64,114 @@ export default function CheckOut() {
         }
     })
 
+
     console.log(orderItems)
 
     let orderData = {
         address:data ,
         items:orderItems,
-        paymentmethod:paymentMethod,
+        paymentMethod,
         amount:TotalAmount,
         userId:currentUser?._id
     }
 
     console.log(orderData)
 
-    try
+    switch(paymentMethod)
     {
 
-        const res = await axios.post(url + "/api/order/place-order",orderData)
-
-        if(res.data.success)
-        {
-            switch(paymentMethod)
+        case 'stripe':
+            try
             {
-                case 'mpesa':
+                setLoading(true)
 
-                    toast.success('Prompt has been sent to your phone')
+                const res = await axios.post(url + "/api/order/place-orderStripe", orderData)
 
-                    break;
-                case 'stripe':
+                if(res.data.success)
+                {
+                    setLoading(false)
 
-                    const  {session_url} = res.data 
+                    const {session_url} = response.data
 
                     window.location.replace(session_url)
+                }
+                else
+                {
+                    setLoading(false)
 
-                    break;
-                case 'payment after delivery':
-
-                    toast.success('Your order has been completed successfully')
-
-                    break;
-                default:
-                    console.error('Invalid payment method')
+                    console.log("check the api")
+                }
             }
-        }
+            catch(error)
+            {
+                console.error(error.message)
 
-    }
-    catch(error)
-    {
-        console.log(error.message)
+                setLoading(false)
+            }
+           break;
+        case 'mpesa':
+            try
+            {
+                setLoading(true)
+
+                const res = await axios.post(url + "/api/order/place-orderMpesa",orderData)
+
+                if(res.data.success)
+                {
+                    setPrompt(true)
+
+                    setCompleteOrder(true)
+
+                    setLoading(false)
+
+                    toast.success('prompt has been sent to your phone')
+                }
+                else
+                {
+                    setLoading(false)
+
+                    console.log("check the api")
+                }
+            }
+            catch(error)
+            {
+                console.log(error.message)
+
+                setLoading(false)
+            }
+            break;
+        case 'payment after delivery':
+            try
+            {
+                setLoading(true)
+
+                const res = await axios.post(url + "/api/order/place-orderAfterDelivery", orderData)
+
+                if(res.data.success)
+                {
+                    toast.success("order completed successfully")
+
+                    setLoading(false)
+
+                    navigate('/list-orders')
+                }
+                else
+                {
+                    setLoading(false)
+
+                    console.log("check the api")
+                }
+            }
+            catch(error)
+            {
+                console.log(error.message)
+
+                setLoading(false)
+            }
+            break;
+        default:
+            console.log('Invalid payment method')
+
     }
 
   }
@@ -435,8 +500,7 @@ export default function CheckOut() {
                                 type="radio"
                                 name="paymentmethod"
                                 value="stripe"
-                                onChange={onChangePayment}
-                                
+                                onChange={(e) => setPaymentMethod(e.target.value)}    
                             />
 
                             <Label
@@ -453,7 +517,7 @@ export default function CheckOut() {
                                 type="radio"
                                 name="paymentmethod"
                                 value="mpesa"
-                                onChange={onChangePayment}
+                                onChange={(e) => setPaymentMethod(e.target.value)}
                             />
 
                             <Label
@@ -470,7 +534,7 @@ export default function CheckOut() {
                                 type="radio"
                                 name="paymentmethod"
                                 value="payment after delivery"
-                                onChange={onChangePayment}
+                                onChange={(e) => setPaymentMethod(e.target.value)}
                             />
 
                             <Label
@@ -491,8 +555,15 @@ export default function CheckOut() {
                         onClick={placeorder}
                         className="md:w-full w-[70%]"
                         gradientDuoTone="pinkToOrange"
+                        disabled={Loading}
                     >
-                        COMPLETE ORDER
+                        {Loading ? 
+                            <span className="flex items-center">
+                                <Spinner className="mr-3"/> Loading ...
+                            </span>
+                                :
+                            "COMPLETE ORDER"
+                        }
                     </Button>
 
                 </div>

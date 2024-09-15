@@ -8,7 +8,7 @@ export default function Reveiws({reveiw}) {
 
   return (
 
-    <div className=" flex p-4 text-sm">
+    <div className=" flex p-4 text-sm mt-5 border-b border-gray-400 dark:border-gray-700">
 
         <div className="flex-shrink-0 mr-3">
 

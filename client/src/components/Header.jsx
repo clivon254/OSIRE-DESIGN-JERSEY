@@ -1,6 +1,6 @@
 
 
-import { Avatar, Button, Dropdown, Navbar } from 'flowbite-react'
+import { Avatar, Button, Drawer, Dropdown, Navbar, Sidebar } from 'flowbite-react'
 import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Logo from './Logo'
@@ -12,7 +12,8 @@ import { StoreContext } from '../context/store'
 import axios from "axios"
 import { signOutSuccess } from '../redux/user/userSlice'
 import { toast } from 'sonner'
-
+import DashSidebar from '../../../admin/src/components/DashSidebar'
+import {HiLogout,HiHome,HiBookmark,HiDocumentSearch,HiAtSymbol} from "react-icons/hi"
 
 export default function Header() {
 
@@ -37,7 +38,11 @@ export default function Header() {
 
     for (const item in cartItems) {
 
-      totalItems += cartItems[item]
+      if (cartItems[item] > 0) {
+
+        totalItems += cartItems[item];
+
+      }
 
     }
 
@@ -99,133 +104,243 @@ export default function Header() {
 
   return (
 
-    <Navbar className={`py-5 border-b shadow-md transition duration-500 ease-in-out ${isSticky ? 'sticky top-0' : ''}`}>
+    <>
 
-      <div className="md:hidden">
+      <Navbar className={`py-5 border-b shadow-md transition duration-500 ease-in-out z-[100] ${isSticky ? 'sticky top-0' : ''} dark:bg-black`}>
 
-        {
-          isOpen ?
-          <MdClose 
+        <div className="md:hidden">
+
+          {
+            isOpen ?
+            (<MdClose 
+                className="cursor-pointer"
+                onClick={() => setIsOpen(false)}
+                size={25}
+            />)
+            :
+            (<MdMenu 
               className="cursor-pointer"
               onClick={() => setIsOpen(true)}
               size={25}
-          />
-          :
-          <MdMenu 
-             className="cursor-pointer"
-             onClick={() => setIsOpen(false)}
-             size={25}
-          />
-        }
-      </div>
+            />)
+          }
+        </div>
 
-      {/* logo */}
-      <div className="">
-        
-        <Link to="/">
+        {/* logo */}
+        <div className="">
+          
+          <Link to="/">
 
-            <Logo />
+              <Logo />
 
-        </Link>
+          </Link>
 
-      </div>
+        </div>
 
-      <ul className="text-sm hidden md:flex items-center gap-x-10 font-semibold">
+        <ul className="text-sm hidden md:flex items-center gap-x-10 font-semibold">
 
-        <NavLink to="/" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>HOME</NavLink>
-        
-        <NavLink to="/shop" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>SHOP</NavLink>
+          <NavLink to="/" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>HOME</NavLink>
+          
+          <NavLink to="/shop" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>SHOP</NavLink>
 
-        <NavLink to="/contact" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>CONTACT</NavLink>
+          <NavLink to="/contact" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>CONTACT</NavLink>
 
-        <NavLink to="/about" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>ABOUT</NavLink>
+          <NavLink to="/about" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>ABOUT</NavLink>
 
-      </ul>
+        </ul>
 
-      <div className="flex gap-x-4 md:order-2 items-center">
+        <div className="flex gap-x-4 md:order-2 items-center">
 
-          <button 
-            className="hidden w-8 h-8 border rounded-full md:flex items-center justify-center"
-            onClick={() => dispatch(toggleTheme())}
-           >
-            {theme === 'light' ? <FaSun/> : <FaMoon/>}
-          </button>
+            <button 
+              className="hidden w-8 h-8 border rounded-full md:flex items-center justify-center"
+              onClick={() => dispatch(toggleTheme())}
+            >
+              {theme === 'light' ? <FaSun/> : <FaMoon/>}
+            </button>
+            
+            {currentUser && (
 
-          <div className="relative ">
+              <div className="relative ">
 
-              <Link to="/cart">
+                <Link to="/cart">
+  
+                  <FaShoppingCart size={25}/>
+  
+                  <span className="absolute bottom-[65%] -right-2 w-5 h-5 border border-amber-500 bg-amber-500 text-black rounded-full flex justify-center items-center text-xs font-medium">
+                    {getTotalCartItems()}
+                  </span>
+  
+                </Link>
+  
+              </div>
 
-                <FaShoppingCart size={25}/>
+            )}
+          
 
-                <span className="absolute bottom-[65%] -right-2 w-5 h-5 border border-amber-500 bg-amber-500 text-black rounded-full flex justify-center items-center text-xs font-medium">
-                  {getTotalCartItems()}
-                </span>
+          {currentUser ? 
+            <Dropdown
+              arrowIcon={false}
+              inline
+              label={
+                <Avatar 
+                  alt="user"
+                  img={currentUser.profilePicture}
+                  rounded
+                />
+              }
+            >
+              <Dropdown.Header>
+                
+                <span className="block text-sm">{currentUser.username}</span>
+                
+                <span className="block text-sm font-medium truncate">{currentUser.email}</span>
+              
+              </Dropdown.Header>
+
+              <Dropdown.Divider/>
+
+              <Link to="/profile">
+
+                <Dropdown.Item>Profile</Dropdown.Item>
 
               </Link>
 
-          </div>
+              <Link to="/list-orders">
 
-        {currentUser ? 
-          <Dropdown
-            arrowIcon={false}
-            inline
-            label={
-              <Avatar 
-                alt="user"
-                img={currentUser.profilePicture}
-                rounded
-              />
-            }
-          >
-            <Dropdown.Header>
-              
-              <span className="block text-sm">{currentUser.username}</span>
-              
-              <span className="block text-sm font-medium truncate">{currentUser.email}</span>
-            
-            </Dropdown.Header>
+                <Dropdown.Item>My Orders</Dropdown.Item>
 
-            <Dropdown.Divider/>
+              </Link>
 
-            <Link to="/profile">
+              <Dropdown.Item onClick={handleSignOut}>
+                Sign out
+              </Dropdown.Item>
 
-              <Dropdown.Item>Profile</Dropdown.Item>
+            </Dropdown> 
+              :
+            <div className="">
 
-            </Link>
+              <Link to="/sign-in">
 
-            <Link to="/list-orders">
+                <Button 
+                    gradientDuoTone="purpleToBlue"
+                    outline
+                >
+                  Sign In
+                </Button>
 
-              <Dropdown.Item>My Orders</Dropdown.Item>
+              </Link>
 
-            </Link>
+            </div>
+          }
+          
 
-            <Dropdown.Item onClick={handleSignOut}>
-              Sign out
-            </Dropdown.Item>
+        </div>
 
-          </Dropdown> 
-            :
-          <div className="">
+      </Navbar>
 
-            <Link to="/sign-in">
 
-              <Button 
-                  gradientDuoTone="purpleToBlue"
-                  outline
-              >
-                Sign In
-              </Button>
+       <Drawer
+            open={isOpen}
+            onClose={() =>setIsOpen(false)}
+            className="md:hidden "
+        >
+            <Drawer.Header titleIcon={() => <></>}/>
 
-            </Link>
+            <Drawer.Items>
 
-          </div>
-        }
-        
+                <Sidebar className="w-full h-full mt-10 bg-black">
 
-      </div>
+                <Sidebar.Items>
 
-    </Navbar>
+                  <Sidebar.ItemGroup>
 
+                      <div className="flex flex-col ">
+                    
+                        <Link to="/">
+
+                          <Sidebar.Item
+                            onClick={() => setIsOpen(false)}
+                            icon={HiHome}
+                            as="div"
+                            active={window.location.pathname === "/"}
+                          >
+                            Home
+                          </Sidebar.Item>
+
+                        </Link>
+
+                        <Link to="/shop">
+
+                          <Sidebar.Item
+                            onClick={() => setIsOpen(false)}
+                            icon={HiBookmark}
+                            as="div"
+                            active={window.location.pathname === "/shop"}
+                          >
+                            Shop
+                          </Sidebar.Item>
+
+                        </Link>
+
+                        <Link to="/contact">
+
+                          <Sidebar.Item
+                            onClick={() => setIsOpen(false)}
+                            icon={HiDocumentSearch}
+                            as="div"
+                            active={window.location.pathname === "/contact"}
+                          >
+                            Contact
+                          </Sidebar.Item>
+
+                        </Link>
+
+                        <Link to="/about">
+
+                          <Sidebar.Item
+                            onClick={() => setIsOpen(false)}
+                            icon={HiAtSymbol}
+                            as="div"
+                            active={window.location.pathname === "/about"}
+                          >
+                            About
+                          </Sidebar.Item>
+
+                        </Link>
+
+                        <Sidebar.Item
+                          icon={HiLogout}
+                          as="div"
+                          onClick={handleSignOut}
+                          className="cursor-pointer"
+                        >
+                          Sign out
+                        </Sidebar.Item>
+
+                        <Sidebar.Item>
+
+                          <button 
+                            className=" w-8 h-8 border rounded-full flex items-center justify-center"
+                            onClick={() => dispatch(toggleTheme())}
+                          >
+                            {theme === 'light' ? <FaSun/> : <FaMoon/>}
+                          </button>
+
+                        </Sidebar.Item>
+
+                      </div>
+
+                  </Sidebar.ItemGroup>
+
+                </Sidebar.Items>
+
+            </Sidebar>
+
+            </Drawer.Items>
+
+        </Drawer>
+
+    </>
   )
   
 }

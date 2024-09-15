@@ -11,7 +11,7 @@ export default function FooterComp() {
 
   return (
 
-    <Footer className=" border-t-4 border-amber-300 p-4">
+    <Footer className=" border-t-4 border-amber-300 p-4 dark:bg-black">
 
         <div className="w-full max-w-7xl mx-auto">
 
