@@ -13,7 +13,7 @@ export default function StoreContextProvider(props)
 {   
     
 
-    const url = "https://osire-design-jersey-backend.onrender.com/"
+    const url = "https://osire-design-jersey-backend.onrender.com"
 
     const {currentUser}  = useSelector(state => state.user)
 
