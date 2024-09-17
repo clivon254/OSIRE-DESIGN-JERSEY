@@ -14,9 +14,6 @@ export default function DashSidebar() {
 
     const {url} = useContext(StoreContext)
 
-    const navigate = useNavigate()
-
-
   return (
 
     <Sidebar className="w-full h-full mt-10">
