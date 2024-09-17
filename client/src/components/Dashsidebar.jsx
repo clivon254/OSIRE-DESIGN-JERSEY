@@ -3,10 +3,7 @@
 
 import { Sidebar } from 'flowbite-react'
 import React, { useContext } from 'react'
-import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import {toast} from "sonner"
-import { signOutSuccess } from '../redux/user/userSlice'
 import { FaMoon, FaSun } from 'react-icons/fa'
 import {HiLogout} from "react-icons/hi"
 import { toggleTheme } from '../redux/theme/themeSlice'
