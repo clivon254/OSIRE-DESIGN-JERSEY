@@ -4,9 +4,6 @@
 import React from 'react'
 import { useContext } from 'react'
 import { StoreContext } from '../context/store'
-import {useDispatch} from "react-redux"
-import { signOutSuccess } from '../redux/user/userSlice'
-import { toast } from 'sonner'
 import { Link, useNavigate } from 'react-router-dom'
 import { Sidebar } from 'flowbite-react'
 import { HiAdjustments, HiDatabase, HiDocumentAdd, HiLogout, HiViewList } from "react-icons/hi"
@@ -17,35 +14,7 @@ export default function DashSidebar() {
 
     const {url} = useContext(StoreContext)
 
-
-    const dispatch = useDispatch()
-
     const navigate = useNavigate()
-
-
-    // handleSignOut
-    const handleSignOut = async () => {
-
-        try
-        {
-            const res = await axios.post(url + "/api/auth/sign-out")
-
-            if(res.data.success)
-            {
-                dispatch(signOutSuccess())
-
-                toast.success("you have signout successfully")
-
-                navigate('/sign-in')
-            }
-
-        }
-        catch(error)
-        {
-            console.log(error.message)
-        }
-
-    }
 
 
   return (
