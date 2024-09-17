@@ -130,10 +130,6 @@ export default function Header() {
                     />
 
                 </form>
-                
-                <button className="w-12 h-10 md:hidden" >
-                        <MdOutlineSearch/>
-                </button>
 
                 <button 
                     className="w-10 h-10 flex items-center justify-center border rounded-full border-gray-300"

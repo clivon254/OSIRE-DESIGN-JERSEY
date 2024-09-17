@@ -4,6 +4,7 @@ import React, { useContext, useEffect } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { StoreContext } from '../context/store';
 import { Spinner } from 'flowbite-react';
+import axios from "axios"
 
 export default function VerifyOrder() {
 

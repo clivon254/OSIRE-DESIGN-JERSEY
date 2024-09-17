@@ -11,7 +11,7 @@ export default function ListOfOrders() {
 
     <main className="p-5 max-w-4xl mx-auto">
 
-      <h2 className="subtitle">Orders</h2>
+      <h2 className="subtitle text-center">Orders</h2>
 
       <div className=" table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
 
@@ -21,11 +21,7 @@ export default function ListOfOrders() {
 
             <Table.HeadCell></Table.HeadCell>
 
-            <Table.HeadCell>order Id</Table.HeadCell>
-
-            <Table.HeadCell>items</Table.HeadCell>
-
-            <Table.HeadCell>no items</Table.HeadCell>
+            <Table.HeadCell colSpan={2}>items</Table.HeadCell>
 
             <Table.HeadCell>Amount</Table.HeadCell>
 
@@ -42,30 +38,22 @@ export default function ListOfOrders() {
 
                   <Table.Cell>{index + 1}</Table.Cell>
 
-                  <Table.Cell>
-                    #{order._id}
-                  </Table.Cell>
-
-                  <Table.Cell>
+                  <Table.Cell colSpan={2}>
 
                     <div className="">
                       {order.items.map((item,index) => {
 
                         if(index === order.items.length-1)
                         {
-                          return <span className="block text-xs font-semibold">{item.team} x {item.quantity}</span>
+                          return <span className="block text-xs font-semibold whitespace-nowrap">{item.team} x {item.quantity}</span>
                         }
                         else
                         {
-                          return <span className="block text-xs font-semibold">{item.team} x {item.quantity},</span>
+                          return <span className="block text-xs font-semibold whitespace-nowrap">{item.team} x {item.quantity},</span>
                         }
                       })}
                     </div>
 
-                  </Table.Cell>
-
-                  <Table.Cell>
-                    {order.items.length}
                   </Table.Cell>
 
                   <Table.Cell>

@@ -4,10 +4,12 @@ import Order from "../model/orderModel.js"
 import User from "../model/userModel.js"
 import Stripe from "stripe"
 import Payment from "../model/paymentModel.js"
-
+import twilio from "twilio"
+import Product from "../model/productModel.js"
 
 const stripe = new Stripe(process.env.STRIPE_SECRETE_KEY)
 
+const accountSid = process.env
 
 
 export const placeOrderStripe = async (req,res,next) => {
@@ -171,6 +173,18 @@ export const placeOrderAfterDelivery = async (req,res,next) => {
             userId
         })
 
+        for(const item in items)
+        {
+            const product = await Product.findById(item._id)
+
+            if(product)
+            {
+                product.instock -= item.quantity
+
+                await product.save()
+            }
+        }
+
         await newOrder.save()
 
         await User.findByIdAndUpdate(userId, {cartData:{}})
@@ -198,7 +212,7 @@ export const callback = async (req,res,next) => {
             res.json("ok")
         }
 
-        await User.findByIdAndUpdate(userId, {cartData:{}})
+        // await User.findByIdAndUpdate(userId, {cartData:{}})
 
         const phone = callbackData.Body.stkCallback.CallbackMetadata.Item[4].Value
         
@@ -234,6 +248,8 @@ export const verifyOrder = async (req,res,next) => {
         {
             await Order.findByIdAndUpdate(orderId,{payment:true})
 
+
+
             res.status(200).json({success:true ,message:"paid"})
         }
         else
@@ -255,7 +271,9 @@ export const adminOrders = async (req,res,next) => {
 
     try
     {
-        const orders = await Order.find({})
+        const sortDirection = req.query.order === 'asc' ? 1 : -1
+
+        const orders = await Order.find({}).sort({createdAt:sortDirection}).sort({createdAt:sortDirection})
 
         res.status(200).json({success:true , orders})
     }
@@ -273,7 +291,9 @@ export const userOrders = async (req,res,next) => {
 
     try
     {
-        const orders = await Order.find({userId:userId})
+        const sortDirection = req.query.order === 'asc' ? 1 : -1
+
+        const orders = await Order.find({userId:userId}).sort({createdAt:sortDirection})
 
         res.status(200).json({success:true, orders})
     }

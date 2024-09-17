@@ -5,6 +5,9 @@ import { Table ,Select} from 'flowbite-react'
 import React, { useContext } from 'react'
 import { StoreContext } from '../context/store'
 import axios from "axios"
+import {FaCheck } from "react-icons/fa"
+import {MdClose} from "react-icons/md"
+import {toast} from "sonner"
 
 
 export default function ListOfOrders() {
@@ -16,7 +19,7 @@ export default function ListOfOrders() {
 
     try
     {
-      const res = await axios.post(url + "/api/order/update-status",{orderId,status:event.target.value})
+      const res = await axios.put(url + "/api/order/update-status",{orderId, status:event.target.value})
 
       if(res.data.success)
       {
@@ -37,7 +40,7 @@ export default function ListOfOrders() {
 
     <main className="p-5 max-w-4xl mx-auto">
 
-      <h2 className="subtitle">Orders</h2>
+      <h2 className="subtitle text-center">Orders</h2>
 
       <div className=" table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
 
@@ -55,6 +58,10 @@ export default function ListOfOrders() {
 
             <Table.HeadCell>Address</Table.HeadCell>
 
+            <Table.HeadCell>Payment Method</Table.HeadCell>
+
+            <Table.HeadCell>paid</Table.HeadCell>
+
             <Table.HeadCell>status</Table.HeadCell>
 
           </Table.Head>
@@ -62,7 +69,7 @@ export default function ListOfOrders() {
           {
             orders.map((order,index) => (
 
-              <Table.Body className="">
+              <Table.Body key={index} className="">
 
                 <Table.Row>
 
@@ -75,11 +82,11 @@ export default function ListOfOrders() {
 
                         if(index === order.items.length-1)
                         {
-                          return <span className="block text-xs font-semibold">{item.team} x {item.quantity}</span>
+                          return <span className="block text-xs font-semibold whitespace-nowrap">{item.team} x {item.quantity}</span>
                         }
                         else
                         {
-                          return <span className="block text-xs font-semibold">{item.team} x {item.quantity},</span>
+                          return <span className="block text-xs font-semibold whitespace-nowrap">{item.team} x {item.quantity},</span>
                         }
                       })}
                     </div>
@@ -109,11 +116,28 @@ export default function ListOfOrders() {
                   </Table.Cell>
 
                   <Table.Cell>
+                    {order.paymentmethod}
+                  </Table.Cell>
+
+                  <Table.Cell>
+                    {order.payment ? 
+                      (
+                        <FaCheck size={20} className="text-green-500"/>
+                      ) 
+                      : 
+                      (
+                        <MdClose size={20} className="text-red-500"/>
+                      )
+                    }
+                  </Table.Cell>
+
+                  <Table.Cell>
 
                       <Select
                         name="status"
                         value={order.status}
                         onChange={(event) => statusHandler(event,order._id)}
+                        className="whitespace-nowrap w-32"
                       >
 
                         <option value="order processing">order processing</option>

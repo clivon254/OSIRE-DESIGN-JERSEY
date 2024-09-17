@@ -19,7 +19,7 @@ export default function CheckOut() {
 
   const [shippingMethod , setShippingMethod] = useState(null)
 
-  const [paymentMethod , setPaymentMethod] = useState(null)
+  const [paymentmethod , setPaymentmethod] = useState(null)
 
   const [prompt , setPrompt] = useState(false)
 
@@ -70,14 +70,14 @@ export default function CheckOut() {
     let orderData = {
         address:data ,
         items:orderItems,
-        paymentMethod,
+        paymentmethod,
         amount:TotalAmount,
         userId:currentUser?._id
     }
 
     console.log(orderData)
 
-    switch(paymentMethod)
+    switch(paymentmethod)
     {
 
         case 'stripe':
@@ -91,7 +91,7 @@ export default function CheckOut() {
                 {
                     setLoading(false)
 
-                    const {session_url} = response.data
+                    const {session_url} = res.data
 
                     window.location.replace(session_url)
                 }
@@ -180,7 +180,7 @@ export default function CheckOut() {
 
     console.log(shippingMethod)
 
-    console.log(paymentMethod)
+    console.log(paymentmethod)
     
   return (
 
@@ -500,7 +500,7 @@ export default function CheckOut() {
                                 type="radio"
                                 name="paymentmethod"
                                 value="stripe"
-                                onChange={(e) => setPaymentMethod(e.target.value)}    
+                                onChange={(e) => setPaymentmethod(e.target.value)}    
                             />
 
                             <Label
@@ -517,7 +517,7 @@ export default function CheckOut() {
                                 type="radio"
                                 name="paymentmethod"
                                 value="mpesa"
-                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                onChange={(e) => setPaymentmethod(e.target.value)}
                             />
 
                             <Label
@@ -534,7 +534,7 @@ export default function CheckOut() {
                                 type="radio"
                                 name="paymentmethod"
                                 value="payment after delivery"
-                                onChange={(e) => setPaymentMethod(e.target.value)}
+                                onChange={(e) => setPaymentmethod(e.target.value)}
                             />
 
                             <Label
