@@ -1,6 +1,6 @@
 
 
-import React, { useContext } from 'react'
+import React, { useContext,useEffect } from 'react'
 import Divider from '../components/Divider'
 import SlideProducts from '../components/SlideProducts'
 import { StoreContext } from '../context/store'
@@ -12,6 +12,23 @@ import banner2 from "../assets/banner2.jpeg"
 export default function Home() {
 
   const {products} = useContext(StoreContext)
+
+  // const shuffleArray = (array) => {
+  //   for (let i = array.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1))
+  //     [array[i], array[j]] = [array[j], array[i]]
+  //   }
+  // }
+
+  //  useEffect(() => {
+  //     if (products && products.length > 0) {
+  //         shuffleArray(products)
+  //     }
+  //   }, [products]);
+
+  const retroProducts = products.filter(product => product.tag === 'Retro')
+
+  const kidsProducts = products.filter(product => product.tag === 'Kids')
 
   return (
     
@@ -31,7 +48,7 @@ export default function Home() {
       {/* WEEKLY FEATURED PRODUCTS */}
       <section className="px-5 my-10 space-y-5">
 
-        <Divider title="Weekly products" bg="text-red-500"/>
+        <Divider title="Weekly FEATURED" bg="text-red-500"/>
         
         <SlideProducts products={products}/>
 
@@ -53,7 +70,7 @@ export default function Home() {
 
         <Divider title="RETRO COLLECTION" />
         
-        <SlideProducts products={products}/>
+        <SlideProducts products={retroProducts}/>
 
       </section>
 
@@ -63,7 +80,7 @@ export default function Home() {
 
         <Divider title="KIDS COLLECTION" />
         
-        <SlideProducts products={products}/>
+        <SlideProducts products={kidsProducts}/>
 
       </section>
 

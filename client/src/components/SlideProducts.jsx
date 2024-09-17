@@ -1,6 +1,6 @@
 
 
-import React, { useContext, useState } from 'react'
+import React, { useContext,useEffect, useState } from 'react'
 // swiper components
 import {Swiper, SwiperSlide} from "swiper/react"
 // Swiper styles
@@ -18,6 +18,7 @@ export default function SlideProducts({products}) {
   ])
 
   const {Loading} = useContext(StoreContext)
+  
 
   return (
 
@@ -29,8 +30,8 @@ export default function SlideProducts({products}) {
                     <Swiper
                         className="mySwiper"
                         spaceBetween={10}
-                        slidesPerveiw={2}
-                        Loop={"true"}
+                        slidesPerView={2}
+                        // loop={true}
                         autoPlay={
                         {
                             delay:2000,

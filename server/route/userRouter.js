@@ -14,10 +14,10 @@ const userRouter = express()
 userRouter.get('/get-user/:userId',verifyToken,  getUser)
 
 
-userRouter.delete('/delete-user/:userId',verifyToken , deleteUser)
+userRouter.delete('/delete-user/:userId' , deleteUser)
 
 
-userRouter.put('/update-user/:userId',verifyToken , updateUser)
+userRouter.put('/update-user/:userId', updateUser)
 
 
 userRouter.get('/get-users', getUsers)

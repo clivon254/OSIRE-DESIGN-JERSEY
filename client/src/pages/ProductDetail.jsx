@@ -4,7 +4,7 @@ import { Button, Label, Select, Spinner, TextInput } from 'flowbite-react'
 import React from 'react'
 import { useEffect } from 'react'
 import { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import axios from "axios"
 import { useContext } from 'react'
 import { StoreContext } from '../context/store'
@@ -37,7 +37,8 @@ export default function ProductDetail() {
   const [reveiws, setReveiws] = useState([])
 
   const [relatedProducts, setRelatedProducts] = useState([])
-
+  
+  const navigate = useNavigate()
   
   useEffect(() => {
 
@@ -71,6 +72,8 @@ export default function ProductDetail() {
       {
         console.log(error.message)
 
+        setLoading(false)
+
         setError("something went wrong")
       }
 
@@ -85,7 +88,7 @@ export default function ProductDetail() {
 
         setError(null)
 
-        const res = await axios.get( url + `/api/product/get-products?league=${product.league}`)
+        const res = await axios.get( url + `/api/product/get-products?team=${product.team}`)
 
         if(res.data.success)
         {
@@ -136,13 +139,13 @@ export default function ProductDetail() {
 
     fetchProduct()
 
-    if(product.league)
+    if(product.team)
     {
        fetchRelatedProducts()
     }
    
 
-  },[params.productId,product.league])
+  },[params.productId,product.team])
 
 
   // handleChange
@@ -179,6 +182,50 @@ export default function ProductDetail() {
           }
           
           setFormData({})
+
+       }
+       else
+       {
+        console.log("check the api")
+       }
+
+    }
+    catch(error)
+    {
+      console.log(error.message)
+    }
+
+  }
+
+  // handleSubmit
+  const proceedToCheckOut = async (e) => {
+
+    e.preventDefault()
+    
+    let itemId = params.productId
+
+    try
+    {
+      console.log("am working")
+
+       const res = await axios.post( url + "/api/cart/add-cart",formData)
+
+       if(res.data.success)
+       {
+          if(!cartItems[itemId])
+          {
+            setCartItems((prev) => ({...prev,[itemId]:1}))
+
+           toast.success('product added to cart')
+          }
+          else
+          {
+            toast.success('product already added to cart')
+          }
+          
+          setFormData({})
+
+          navigate('/check-out')
 
        }
        else
@@ -242,7 +289,7 @@ export default function ProductDetail() {
                         key={index}
                         src={image} 
                         alt={`image ${index + 1}`}
-                        className="bg-black/10" 
+                        className="bg-black/10 z-10" 
                       />
 
                     ))
@@ -374,6 +421,7 @@ export default function ProductDetail() {
                       type="button"
                       className="w-full"
                       gradientDuoTone="greenToBlue"
+                      onClick={proceedToCheckOut }
                     >
                       CheckOut
                     </Button>

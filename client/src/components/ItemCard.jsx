@@ -54,14 +54,14 @@ export default function ItemCard({product}) {
 
                 </Link>
 
-                <div 
+                {/* <div 
                     className="w-full text-center cursor-pointer absolute bg-blue-600 opacity-0 group-hover:opacity-100 bottom-0 left-0 duration-500 ease-in translate-y-0 transition-all py-2"
                     onClick={() => veiw(product)}
                 >
 
                     <span className="font-semibold text-white">QUICK VEIW</span>
 
-                </div>
+                </div> */}
 
             </div>
 

@@ -43,11 +43,11 @@ export default function StoreContextProvider(props)
 
     const veiw = (product) => {
 
-        // setDetails({...product})
+        setDetails({...product})
 
-        // setClose()
+        setClose()
 
-        // console.log("yes am worling")
+        console.log("yes am worling")
 
     }
 
@@ -73,6 +73,8 @@ export default function StoreContextProvider(props)
         catch(error)
         {
             console.log(error.message)
+
+            setLoading(false)
         }
 
     }
@@ -137,7 +139,7 @@ export default function StoreContextProvider(props)
         console.log(error.message)
     }
 
-   }
+    }
 
 
    // Total Amount
@@ -205,7 +207,6 @@ export default function StoreContextProvider(props)
     }
 
    
-
     return(
 
         <StoreContext.Provider value={contextValue}>

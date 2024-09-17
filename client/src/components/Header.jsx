@@ -106,7 +106,7 @@ export default function Header() {
 
     <>
 
-      <Navbar className={`py-5 border-b shadow-md transition duration-500 ease-in-out z-[100] ${isSticky ? 'sticky top-0' : ''} dark:bg-black`}>
+      <Navbar className={`py-5 border-b shadow-md transition duration-500 ease-in-out ${isSticky ? 'sticky top-0' : ''} dark:bg-black`}>
 
         <div className="md:hidden">
 
@@ -144,8 +144,6 @@ export default function Header() {
           <NavLink to="/shop" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>SHOP</NavLink>
 
           <NavLink to="/contact" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>CONTACT</NavLink>
-
-          <NavLink to="/about" className={({isActive}) => isActive ? "active-link" :"hover:active-link"}>ABOUT</NavLink>
 
         </ul>
 
@@ -238,11 +236,10 @@ export default function Header() {
 
       </Navbar>
 
-
        <Drawer
             open={isOpen}
             onClose={() =>setIsOpen(false)}
-            className="md:hidden "
+            className="md:hidden z-[1000000000000]"
         >
             <Drawer.Header titleIcon={() => <></>}/>
 
@@ -295,28 +292,17 @@ export default function Header() {
 
                         </Link>
 
-                        <Link to="/about">
-
+                        {currentUser && (
                           <Sidebar.Item
-                            onClick={() => setIsOpen(false)}
-                            icon={HiAtSymbol}
+                            icon={HiLogout}
                             as="div"
-                            active={window.location.pathname === "/about"}
-                          >
-                            About
+                            onClick={handleSignOut}
+                            className="cursor-pointer"
+                           >
+                            Sign out
                           </Sidebar.Item>
-
-                        </Link>
-
-                        <Sidebar.Item
-                          icon={HiLogout}
-                          as="div"
-                          onClick={handleSignOut}
-                          className="cursor-pointer"
-                        >
-                          Sign out
-                        </Sidebar.Item>
-
+                        )}
+                        
                         <Sidebar.Item>
 
                           <button 
@@ -338,7 +324,7 @@ export default function Header() {
 
             </Drawer.Items>
 
-        </Drawer>
+       </Drawer>
 
     </>
   )

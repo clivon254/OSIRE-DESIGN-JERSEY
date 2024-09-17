@@ -1,10 +1,11 @@
 
 
 import axios from 'axios'
-import React, { useEffect ,useState} from 'react'
+import React, { useContext, useEffect ,useState} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import ItemCard from '../components/ItemCard'
 import { Button, Label, Select, TextInput } from 'flowbite-react'
+import { StoreContext } from '../context/store'
 
 export default function Search() {
 
@@ -17,6 +18,8 @@ export default function Search() {
     league:''
   })
 
+  const {url} = useContext(StoreContext)
+
   const [loading, setLoading] = useState(false)
 
   const [products, setProducts] = useState([])
@@ -25,32 +28,36 @@ export default function Search() {
 
   const navigate = useNavigate()
 
-    useEffect(() => {
+  useEffect(() => {
 
-      const urlParams = new URLSearchParams(location.search)
+    const urlParams = new URLSearchParams(location.search)
 
-      const searchTermFromUrl = urlParams.get('searchTerm')
+    const searchTermFromUrl = urlParams.get('searchTerm')
 
-      const sortFromUrl = urlParams.get('sort')
+    const sortFromUrl = urlParams.get('sort')
 
-      const leagueFromUrl = urlParams.get('league')
+    const leagueFromUrl = urlParams.get('league')
 
-      const statusFromUrl = urlParams.get('status')
+    const statusFromUrl = urlParams.get('status')
 
-      const tagFromUrl = urlParams.get('tag')
+    const tagFromUrl = urlParams.get('tag')
 
-      if(searchTermFromUrl || sortFromUrl || statusFromUrl || leagueFromUrl || tagFromUrl )
+    if(searchTermFromUrl || sortFromUrl || statusFromUrl || leagueFromUrl || tagFromUrl )
+    {
+        setSidebarData({
+          ...sidebarData,
+          searchTermFromUrl:searchTermFromUrl,
+          sort:sortFromUrl,
+          status:statusFromUrl,
+          tag:tagFromUrl,
+          league:leagueFromUrl
+        })
+    }
+    
+    const fetchProducts = async () => {
+
+      try
       {
-          setSidebarData({
-            ...sidebarData,
-            searchTermFromUrl:searchTermFromUrl,
-            sort:sortFromUrl,
-            status:statusFromUrl,
-            tag:tagFromUrl
-          })
-      }
-      
-      const fetProducts = async () => {
 
         setLoading(true)
 
@@ -64,10 +71,26 @@ export default function Search() {
 
             setLoading(false)
         }
+        else
+        {
+          setLoading(false)
 
-      } 
-      
-    },[location.search]) 
+          console.log(res.data.message)
+        }
+
+      }
+      catch(error)
+      {
+        console.error(error.message)
+
+        setLoading(false)
+      }
+
+    } 
+
+    fetchProducts()
+    
+  },[location.search]) 
 
 
     // handleChange
@@ -98,6 +121,11 @@ export default function Search() {
         setSidebarData({...sidebarData, status:e.target.value})
       }
 
+      if(e.target.name === 'league')
+        {
+          setSidebarData({...sidebarData, league:e.target.value})
+        }
+
     }
 
     // handleSubmit
@@ -119,7 +147,7 @@ export default function Search() {
 
       const searchQuery = urlParams.toString()
 
-      navigate(`/search?${searchQuery}`)
+      navigate(`/shop?${searchQuery}`)
       
     }
 
@@ -127,10 +155,11 @@ export default function Search() {
 
     <div className="flex flex-col md:flex-row">
 
-        <div className=" px-5 border-b md:border-r md:min-h-screen border-gray-500">
+        <div className=" px-5 py-2 border-b md:border-r md:min-h-screen border-gray-500">
 
-            <form action="" className="md:flex md:flex-col md:gap-y-5 mx-auto grid grid-cols-2">
+            <form  onSubmit={handelSubmit} className="md:flex md:flex-col md:gap-y-5 mx-auto grid grid-cols-2">
 
+              {/* search term */}
               <div className="flex flex-col md:flex-row p-2  md:items-center gap-2">
 
                 <Label value="Search Term"/> 
@@ -145,6 +174,7 @@ export default function Search() {
 
               </div>
 
+              {/* season */}
               <div className="flex flex-col md:flex-row p-2  md:items-center gap-2">
 
                 <Label value="season"/>
@@ -161,10 +191,29 @@ export default function Search() {
 
                   <option value="2022/2023">2022/2023</option>
 
+                  <option value="2021/2022">2021/2022</option>
+
+                  <option value="2020/201">2020/201</option>
+
+                  <option value="2019/2020">2019/2020</option>
+
+                  <option value="2018/2019">2018/2019</option>
+
+                  <option value="2017/2018">2017/2018</option>
+
+                  <option value="2022/2023">2022/2023</option>
+
+                  <option value="2022/2023">2022/2023</option>
+
+                  <option value="2022/2023">2022/2023</option>
+
+                  <option value="2007/2008">2007/2008</option>
+
                 </Select>
 
               </div>
 
+               {/*status  */}
               <div className="flex flex-col md:flex-row p-2  md:items-center gap-2">
 
                 <Label value="status"/>
@@ -174,6 +223,7 @@ export default function Search() {
                   onChange={handleChange}
                   name="status"
                 >
+                  <option value=""></option>
 
                   <option value="HOME">HOME</option>
 
@@ -185,6 +235,32 @@ export default function Search() {
 
               </div>
 
+              {/* league */}
+              <div className="flex flex-col md:flex-row p-2  md:items-center gap-2">
+
+                <Label value="League"/>
+
+                <Select
+                  value={sidebarData.league}
+                  onChange={handleChange}
+                  name="league"
+                >
+                    
+                  <option value="choose a league">choose a league</option>
+
+                  <option value="PREMIER LEAGUE">PREMIER LEAGUE</option>
+
+                  <option value="LALIGA">LALIGA</option>
+
+                  <option value="SERIE A">SERIE A</option>
+
+                  <option value="BUNDESLIGA">BUNDESLIGA</option>
+
+                </Select>
+
+              </div>
+              
+              {/* tag */}
               <div className="flex flex-col md:flex-row p-2  md:items-center gap-2">
 
                 <Label value="tag"/>
@@ -195,16 +271,17 @@ export default function Search() {
                   name="tag"
                 >
 
-                  <option value="AUTHENTIC">AUTHENTIC</option>
+                  <option value="AUTHENTIC">Authentic</option>
 
-                  <option value="RETRO">RETRO</option>
+                  <option value="RETRO">Retro</option>
 
-                  <option value="KIDS">KIDS</option>
+                  <option value="KIDS">Kids</option>
 
                 </Select>
 
               </div>
 
+              {/* sort */}
               <div className="flex flex-col md:flex-row p-2  md:items-center gap-2">
 
                 <Label value="sort"/>
@@ -223,7 +300,7 @@ export default function Search() {
 
               </div>
 
-              <div className="flex justify-center items-center">
+              <div className="ml-3">
 
                 <Button
                   type="submit"
@@ -234,13 +311,14 @@ export default function Search() {
                 </Button>
 
               </div>
+
             </form>
 
         </div>
 
-        <div className="w-full">
+        <div className="w-full px-5 py-2">
 
-          <h1 className="text-3xl font-semibold ">
+          <h1 className="text-3xl font-semibold mb-7">
             Product results:
           </h1>
 
@@ -254,7 +332,8 @@ export default function Search() {
            )}
 
            {loading && <p className="text-xl text-gray-500"> Loading .....</p>}
-
+           
+           <div className="grid grid-cols-2 md:grid-cols-3  xl:grid-cols-4  gap-x-6 gap-y-5">
            {!loading && 
               products &&
               products?.map((product) => 
@@ -262,6 +341,7 @@ export default function Search() {
                 <ItemCard product={product}/>
 
             )}
+           </div>
 
         </div>
 

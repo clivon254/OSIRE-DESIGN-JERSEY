@@ -19,6 +19,7 @@ import FooterComp from "./components/FooterComp"
 import Cart from "./pages/Cart"
 import CheckOut from "./pages/CheckOut"
 import VerifyOrder from "./pages/VerifyOrder"
+import Contact from "./pages/contact"
 
 function Layout(){
 
@@ -67,6 +68,8 @@ export default function App() {
               <Route path="/profile" element={<Profile/>}/>
 
               <Route path="/shop" element={<Search/>}/>
+
+              <Route path="/contact" element={<Contact/>}/>
 
               <Route path="/cart" element={<Cart/>}/>
 

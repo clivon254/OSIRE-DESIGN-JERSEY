@@ -54,7 +54,7 @@ export const getProducts = async (req,res,next) => {
     {
         const startIndex = parseInt(req.query.startIndex) || 0 ;
 
-        const limit = parseInt(req.query.limit) || 12 ;
+        const limit = parseInt(req.query.limit) || 20 ;
 
         const sortDirection = req.query.order === 'asc' ? 1 : -1
 
@@ -63,6 +63,7 @@ export const getProducts = async (req,res,next) => {
             ...(req.query.league && {league :req.query.league}),
             ...(req.query.tag && {tag :req.query.tag}),
             ...(req.query.season && {season :req.query.season}),
+            ...(req.query.team && {team :req.query.team}),
             ...(req.query.searchTerm && {team :{$regex:searchTerm ,$options:'i'}})
            })
            .sort({updatedAt:sortDirection})
